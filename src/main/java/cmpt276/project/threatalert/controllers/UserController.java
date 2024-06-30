@@ -60,4 +60,12 @@ public class UserController {
 
     }
 
+    @GetMapping("/user/logout")
+    public String destroySession(HttpServletRequest request) {
+
+        request.getSession().invalidate();
+        return "/user/login";
+
+    }
+
 }
