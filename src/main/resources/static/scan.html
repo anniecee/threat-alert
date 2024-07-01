@@ -36,8 +36,8 @@
     <br><br><br>
     <!-- URL scanner and button -->
     <div style="text-align: center;">
-      <form class="form-inline d-flex justify-content-center" style="width: 50%; margin:auto">
-          <input class="form-control mx-2" type="search" placeholder="Enter URL here to scan for threats" aria-label="Search" style="width: 75%; border: 2px solid; ">
+      <form class="form-inline d-flex justify-content-center" onsubmit="scanLink(event)" style="width: 50%; margin:auto">
+          <input class="form-control mx-2" id="scannedUrl" type="link" placeholder="Enter URL here to scan for threats" aria-label="Link" style="width: 75%; border: 2px solid; ">
           <button class="btn ml-2" type="submit" style="background-color: orange; border: 2px solid; ;">Scan</button>
       </form>
     </div>
