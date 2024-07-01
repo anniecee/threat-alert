@@ -1,8 +1,15 @@
 const apiKey = '5796597306b3edb03cf9aa494b58a755431d95042f093fc3cc46375e52be9687';
-const scannedUrl = 'https://www.cercacor.com/';
+
+// This function is called when user submits form
+function scanLink(event) {
+    event.preventDefault(); // prevent page to reload on submit by default
+
+    const scannedUrl = document.getElementById("scannedUrl").value;
+    sendUrl(scannedUrl).then(analysisId => getAnalysis(analysisId));
+} 
 
 // POST request to send scanned URL and get Analysis ID
-async function sendUrl(callback) {
+async function sendUrl(scannedUrl) {
     const request = new Request('https://www.virustotal.com/api/v3/urls', {
         method: 'POST',
         headers: {
@@ -40,6 +47,5 @@ async function getAnalysis(analysisId) {
         });
 }
 
-sendUrl().then(analysisId => getAnalysis(analysisId));
 
  
