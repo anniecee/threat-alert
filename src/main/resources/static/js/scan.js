@@ -15,6 +15,7 @@ async function sendUrl(scannedUrl) {
         headers: {
             accept: 'application/json',
             'x-apikey': apiKey,
+            'content-type': 'application/x-www-form-urlencoded'
         },
         body: new URLSearchParams({url: scannedUrl})
     })
@@ -41,11 +42,13 @@ async function getAnalysis(analysisId) {
         .then((response) => response.json())
         .then((data) => {
             console.log(data);
+            displayThreatLevel(data);
         })
         .catch((error) => {
             console.error('Error:', error);
         });
 }
 
-
- 
+function displayThreatLevel(data) {
+    
+}
