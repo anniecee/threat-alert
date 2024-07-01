@@ -50,5 +50,18 @@ async function getAnalysis(analysisId) {
 }
 
 function displayThreatLevel(data) {
-    
+    const malicious = data.data.attributes.stats.malicious;
+    const suspicious = data.data.attributes.stats.suspicious;
+
+    if (malicious + suspicious > 5) {
+        const content = "<h3> Threat Level: Warning! </h3>";
+        const element = document.getElementById("threatLevel");
+        element.innerHTML = content;
+        element.style.color = 'orange';
+    } else {
+        const content = "<h3> Threat Level: Clean! </h3>";
+        const element = document.getElementById("threatLevel");
+        element.innerHTML = content;
+        element.style.color = 'green';
+    } 
 }
