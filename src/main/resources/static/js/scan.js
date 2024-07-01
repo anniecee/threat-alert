@@ -51,23 +51,22 @@ async function getAnalysis(analysisId) {
         });
 }
 
+// Display Threat Level as Warning if more than 5 vendors flag the website
 function displayThreatLevel(data) {
     const malicious = data.data.attributes.stats.malicious;
     const suspicious = data.data.attributes.stats.suspicious;
+    const element = document.getElementById("threatLevel");
 
     if (malicious + suspicious > 5) {
         const content = "<h3> Threat Level: Warning! </h3>";
-        const element = document.getElementById("threatLevel");
         element.innerHTML = content;
         element.style.color = 'orange';
     } else {
         const content = "<h3> Threat Level: Clean! </h3>";
-        const element = document.getElementById("threatLevel");
         element.innerHTML = content;
         element.style.color = 'green';
     } 
 }
-
 
 // Display data in the HTML document
 function displayData(data) { 
