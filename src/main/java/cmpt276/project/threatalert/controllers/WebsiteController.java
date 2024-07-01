@@ -21,4 +21,11 @@ public class WebsiteController {
 
     }
 
+    @GetMapping("/back")
+    public String back() {
+
+        return "redirect:/landing";
+
+    }
+
 }
