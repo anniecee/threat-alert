@@ -15,6 +15,7 @@ async function sendUrl(scannedUrl) {
         headers: {
             accept: 'application/json',
             'x-apikey': apiKey,
+            'content-type': 'application/x-www-form-urlencoded'
         },
         body: new URLSearchParams({url: scannedUrl})
     })
@@ -42,12 +43,30 @@ async function getAnalysis(analysisId) {
         .then((data) => {
             console.log(data);
             displayData(data);
+            displayThreatLevel(data);
+
         })
         .catch((error) => {
             console.error('Error:', error);
         });
 }
 
+function displayThreatLevel(data) {
+    const malicious = data.data.attributes.stats.malicious;
+    const suspicious = data.data.attributes.stats.suspicious;
+
+    if (malicious + suspicious > 5) {
+        const content = "<h3> Threat Level: Warning! </h3>";
+        const element = document.getElementById("threatLevel");
+        element.innerHTML = content;
+        element.style.color = 'orange';
+    } else {
+        const content = "<h3> Threat Level: Clean! </h3>";
+        const element = document.getElementById("threatLevel");
+        element.innerHTML = content;
+        element.style.color = 'green';
+    } 
+}
 
 
 // Display data in the HTML document
@@ -70,4 +89,3 @@ function displayData(data) {
         }
         dataElement.textContent = report + '\n' + "Security Vendors' Analysis" + '\n' + detail;
 }
- 
