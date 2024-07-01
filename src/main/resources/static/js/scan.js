@@ -42,9 +42,9 @@ async function getAnalysis(analysisId) {
         .then((response) => response.json())
         .then((data) => {
             console.log(data);
-            displayData(data);
             displayThreatLevel(data);
-
+            displayScanReport(data);
+            displayVendors(data);
         })
         .catch((error) => {
             console.error('Error:', error);
@@ -68,23 +68,42 @@ function displayThreatLevel(data) {
     } 
 }
 
-// Display data in the HTML document
-function displayData(data) { 
-    
-        const dataElement = document.getElementById('dataDisplay');
-        let report = '';
-        for (const type in data.data.attributes.stats) {
-            report += type + ': ' + data.data.attributes.stats[type] + '\n';        // displaying the 5 types of result
-        }
+// display the 5 types of result
+function displayScanReport(data) {
+    const reportElement = document.getElementById('scanReport');
+    const title = "<h4>Scan Report:</h4>"
 
-        let detail = '';
-        const categories = ['malicious', 'suspicious', 'harmless', 'undetected', 'timeout'];
-        for (const category of categories) {
-            for (const vendor in data.data.attributes.results) {
-                if (data.data.attributes.results[vendor].category === category) {
-                    detail += vendor + ' (' + category + '): ' + data.data.attributes.results[vendor].result + '\n'; //displaying the specific result of each vendor
-                }
+    const dataElement = document.getElementById('dataDisplay');
+    let content = "";
+
+    const stats = data.data.attributes.stats;
+    for (const type in stats) {
+        content += type.toUpperCase() + ': ' + stats[type] + '<br>';  
+    }
+
+    reportElement.innerHTML = title;
+    dataElement.innerHTML = content;
+}
+
+//display the specific result of each vendor
+function displayVendors(data) {
+    const vendorsTitle = document.getElementById('vendorsTitle');
+    const title = "<h4>Security Vendors' Details</h4>"
+
+    const vendorsAnalysis = document.getElementById('vendorsAnalysis');
+    let content = "";
+
+    const categories = ['malicious', 'suspicious', 'harmless', 'undetected', 'timeout'];
+
+    for (const category of categories) {
+        const results = data.data.attributes.results;
+        for (const vendor in results) {
+            if (results[vendor].category === category) {
+                content += '<b>' + vendor + '</b> (' + category + '): ' + results[vendor].result.toUpperCase() + '<br>'; 
             }
         }
-        dataElement.textContent = report + '\n' + "Security Vendors' Analysis" + '\n' + detail;
+    }
+
+    vendorsTitle.innerHTML = title;
+    vendorsAnalysis.innerHTML = content;
 }
