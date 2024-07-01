@@ -31,7 +31,7 @@ public class UserController {
         } else {
 
             model.addAttribute("user", user);
-            return "user/protected";
+            return "redirect:/scan.html";
 
         }
 
@@ -54,7 +54,7 @@ public class UserController {
             User user = userList.get(0);
             request.getSession().setAttribute("session_user", user);
             model.addAttribute("user", user);
-            return "user/protected";
+            return "redirect:/scan.html";
 
         }
 
@@ -64,7 +64,7 @@ public class UserController {
     public String destroySession(HttpServletRequest request) {
 
         request.getSession().invalidate();
-        return "/user/login";
+        return "/website/landing";
 
     }
 
