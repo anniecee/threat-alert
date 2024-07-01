@@ -41,6 +41,7 @@ async function getAnalysis(analysisId) {
         .then((response) => response.json())
         .then((data) => {
             console.log(data);
+            displayData(data);
         })
         .catch((error) => {
             console.error('Error:', error);
@@ -48,4 +49,25 @@ async function getAnalysis(analysisId) {
 }
 
 
+
+// Display data in the HTML document
+function displayData(data) { 
+    
+        const dataElement = document.getElementById('dataDisplay');
+        let report = '';
+        for (const type in data.data.attributes.stats) {
+            report += type + ': ' + data.data.attributes.stats[type] + '\n';        // displaying the 5 types of result
+        }
+
+        let detail = '';
+        const categories = ['malicious', 'suspicious', 'harmless', 'undetected', 'timeout'];
+        for (const category of categories) {
+            for (const vendor in data.data.attributes.results) {
+                if (data.data.attributes.results[vendor].category === category) {
+                    detail += vendor + ' (' + category + '): ' + data.data.attributes.results[vendor].result + '\n'; //displaying the specific result of each vendor
+                }
+            }
+        }
+        dataElement.textContent = report + '\n' + "Security Vendors' Analysis" + '\n' + detail;
+}
  
