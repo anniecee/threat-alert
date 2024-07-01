@@ -1,10 +1,10 @@
 const apiKey = '5796597306b3edb03cf9aa494b58a755431d95042f093fc3cc46375e52be9687';
 
-document.getElementById('formId').addEventListener('submit', scanLink);
+// This function is called when user submits form
+function scanLink(event) {
+    event.preventDefault(); // prevent page to reload on submit by default
 
-function scanLink() {
-    console.log("scanlink() is called");
-    scannedUrl = document.getElementById("scannedUrl");
+    const scannedUrl = document.getElementById("scannedUrl").value;
     sendUrl(scannedUrl).then(analysisId => getAnalysis(analysisId));
 } 
 
@@ -41,7 +41,6 @@ async function getAnalysis(analysisId) {
         .then((response) => response.json())
         .then((data) => {
             console.log(data);
-            console.log(data.data.attributes.stats);
         })
         .catch((error) => {
             console.error('Error:', error);
