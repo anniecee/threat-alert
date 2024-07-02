@@ -156,3 +156,34 @@
 .btn-back {
     width: 400px;
 }
+
+/* admin table view */
+
+.header-av {
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.header-ul {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.table-users {
+    border: black;
+    width: auto;
+}
+
+th.id {
+    width: 50px;
+}
+
+th.email, th.password, th.type {
+    min-width: 200px;
+}
+
+.link-delete {
+    background-color: white;
+    border: none;
+    text-decoration: underline;
+}
