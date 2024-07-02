@@ -69,4 +69,47 @@ public class UserController {
 
     }
 
+    @GetMapping("/user/signup")
+    public String getSignup() {
+
+        return "user/signup";
+
+    }
+
+    @PostMapping("/user/signup")
+    public String signup(@RequestParam Map<String, String> formData, Model model, HttpServletRequest request, HttpSession session) {
+
+        String email = formData.get("email");
+        String password = formData.get("password");
+        String confirmedPassword = formData.get("passwordConfirm");
+
+        if (!password.equals(confirmedPassword)) {
+
+            model.addAttribute("error", "Passwords do not match");
+            return "user/signup";
+
+        }
+
+        //check if email is already in repository
+        List<User> userList = userRepo.findByEmail(email);
+
+        //if not in there
+        if (userList.isEmpty()) { //add to database and redirect to home page
+            
+            User user = new User();
+            user.setEmail(email);
+            user.setPassword(confirmedPassword);
+            userRepo.save(user);
+            return "redirect:/scan.html";
+
+        //if in there, redirect back to login saying already have an account
+        } else {
+
+            model.addAttribute("error", "Account linked with email already exists");
+            return "user/signup";
+
+        }
+
+    }
+
 }
