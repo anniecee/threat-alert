@@ -13,7 +13,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import cmpt276.project.threatalert.models.User;
 import cmpt276.project.threatalert.models.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 @Controller
 public class UserController {
@@ -32,7 +35,15 @@ public class UserController {
         } else {
 
             model.addAttribute("user", user);
-            return "redirect:/scan.html";
+
+            //show admin page if user is an admin
+            if (user.getType().equals("admin")) {
+                return "redirect:/admin/userview";
+            } 
+            //show scan page for regular user
+            else {
+                return "redirect:/scan.html";
+            }
 
         }
 
@@ -55,7 +66,15 @@ public class UserController {
             User user = userList.get(0);
             request.getSession().setAttribute("session_user", user);
             model.addAttribute("user", user);
-            return "redirect:/scan.html";
+
+            //show admin page if user is an admin
+            if (user.getType().equals("admin")) {
+                return "redirect:/admin/userview";
+            } 
+            //show scan page for regular user
+            else {
+                return "redirect:/scan.html";
+            }
 
         }
 
@@ -77,7 +96,7 @@ public class UserController {
     }
 
     @PostMapping("/user/signup")
-    public String signup(@RequestParam Map<String, String> formData, Model model, HttpServletRequest request, HttpSession session) {
+    public String signup(@RequestParam Map<String, String> formData, Model model, HttpServletRequest request, HttpSession session, HttpServletResponse response) {
 
         String email = formData.get("email");
         String password = formData.get("password");
@@ -96,10 +115,9 @@ public class UserController {
         //if not in there
         if (userList.isEmpty()) { //add to database and redirect to home page
             
-            User user = new User();
-            user.setEmail(email);
-            user.setPassword(confirmedPassword);
+            User user = new User(email, confirmedPassword);
             userRepo.save(user);
+            response.setStatus(201);
             return "redirect:/scan.html";
 
         //if in there, redirect back to login saying already have an account
@@ -111,5 +129,26 @@ public class UserController {
         }
 
     }
+
+    @GetMapping("/admin/userview")
+    public String showUsers(Model model) {
+
+        List<User> userList = userRepo.findAll();
+
+        model.addAttribute("userList", userList);
+
+        return "admin/userview";
+    }
+
+    @PostMapping("/user/delete")
+    public String deleteUser(@RequestParam("uid") int uid, HttpServletResponse response) {
+
+        userRepo.deleteById(uid);
+        response.setStatus(202);
+
+        return "redirect:/admin/userview";
+    }
+    
+    
 
 }
