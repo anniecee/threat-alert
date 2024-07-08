@@ -15,7 +15,8 @@ async function sendUrl(scannedUrl) {
         headers: {
             accept: 'application/json',
             'x-apikey': apiKey,
-            'content-type': 'application/x-www-form-urlencoded'
+            'content-type': 'application/x-www-form-urlencoded',
+            'Access-Control-Allow-Origin': '*'
         },
         body: new URLSearchParams({url: scannedUrl})
     })
@@ -36,6 +37,7 @@ async function getAnalysis(analysisId) {
         headers: {
             accept: 'application/json',
             'x-apikey': apiKey,
+            'Access-Control-Allow-Origin': '*'
         },
     })
     const result = await fetch(request)
