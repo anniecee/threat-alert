@@ -10,7 +10,7 @@ function scanLink(event) {
 
 // POST request to send scanned URL and get Analysis ID
 async function sendUrl(scannedUrl) {
-    const request = new Request('https://www.virustotal.com/api/v3/urls', {
+    const request = new Request('http://localhost:8080/api/vt/scan', {
         method: 'POST',
         headers: {
             accept: 'application/json',
@@ -18,7 +18,7 @@ async function sendUrl(scannedUrl) {
             'content-type': 'application/x-www-form-urlencoded',
             'Access-Control-Allow-Origin': '*'
         },
-        body: new URLSearchParams({url: scannedUrl})
+        body: new URLSearchParams({unscannedUrl: scannedUrl})
     })
     try {
         const response = await fetch(request);
@@ -32,7 +32,7 @@ async function sendUrl(scannedUrl) {
 
 // GET request to get Analysis from Analysis ID
 async function getAnalysis(analysisId) {
-    const request = new Request(`https://www.virustotal.com/api/v3/analyses/${analysisId}`, {
+    const request = new Request(`http://localhost:8080/api/vt/analysis?analysisId=${analysisId}`, {
         method: 'GET',
         headers: {
             accept: 'application/json',
