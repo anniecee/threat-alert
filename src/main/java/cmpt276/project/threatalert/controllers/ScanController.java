@@ -36,6 +36,7 @@ public class ScanController {
 
     @PostMapping("/scan")
     public ResponseEntity<String> sendUrl(@RequestParam String unscannedUrl) {
+        System.out.println("scan api");
         String url = VT_BASE_URL + "/urls";
         RestTemplate restTemplate = new RestTemplate();
 
@@ -63,6 +64,7 @@ public class ScanController {
 
     @GetMapping("/analysis")
     public ResponseEntity<String> getAnalysis(@RequestParam String analysisId) {
+        System.out.println("analyse api");
         String url = VT_BASE_URL + "/analyses/" + analysisId;
         RestTemplate restTemplate = new RestTemplate();
 
