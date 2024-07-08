@@ -1,12 +1,33 @@
 const apiKey = '5796597306b3edb03cf9aa494b58a755431d95042f093fc3cc46375e52be9687';
 
+
+
 // This function is called when user submits form
 function scanLink(event) {
     event.preventDefault(); // prevent page to reload on submit by default
 
+    
     const scannedUrl = document.getElementById("scannedUrl").value;
-    sendUrl(scannedUrl).then(analysisId => getAnalysis(analysisId));
+    scan().then(sendUrl(scannedUrl).then(analysisId => getAnalysis(analysisId)));
 } 
+
+async function scan(){
+    const request = new Request(`http://localhost:8080/api/vt/test`, {
+        method: 'GET',
+        headers: {
+            accept: 'application/json',
+            'x-apikey': apiKey,
+            'Access-Control-Allow-Origin': '*'
+        },
+    })
+
+    const result = fetch(request)
+        .then((response) => console.log(response))
+        
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+    }
 
 // POST request to send scanned URL and get Analysis ID
 async function sendUrl(scannedUrl) {

@@ -82,5 +82,11 @@ public class ScanController {
             return ResponseEntity.status(e.getStatusCode()).body(e.getResponseBodyAsString());
         }
     }
+
+    @GetMapping("/test")
+    public ResponseEntity<String> getTestApi() {
+        return ResponseEntity.status(200).body("api test");
+    }
+    
     
 }
