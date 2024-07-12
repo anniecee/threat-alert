@@ -12,6 +12,7 @@ function scanLink(event) {
 async function sendUrl(scannedUrl) {
     const request = new Request('https://www.virustotal.com/api/v3/urls', {
         method: 'POST',
+        mode: 'no-cors',
         headers: {
             accept: 'application/json',
             'x-apikey': apiKey,
@@ -34,6 +35,7 @@ async function sendUrl(scannedUrl) {
 async function getAnalysis(analysisId) {
     const request = new Request(`https://www.virustotal.com/api/v3/analyses/${analysisId}`, {
         method: 'GET',
+        mode: 'no-cors',
         headers: {
             accept: 'application/json',
             'x-apikey': apiKey,
