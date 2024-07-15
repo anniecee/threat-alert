@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.actuate.autoconfigure.metrics.MetricsProperties.Web;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -201,6 +202,23 @@ public class UserController {
         return "user/history";
     }
     
-    
+    @PostMapping("/user/deletewebsite")
+    public String deleteWebsite(@RequestParam("website") Website website, HttpServletResponse response) {
+        
+        // Website website = websiteRepo.findByWid(wid);
+        // List<User> userList = userRepo.findByUid(website.getUser().getUid());
+        // User user = userList.get(0);
+
+        // List<Website> websiteList = user.getHistory();
+        // websiteList.remove(website);
+        User user = website.getUser();
+        user.getHistory().remove(website);
+        
+        websiteRepo.delete(website);
+        response.setStatus(202);
+        
+        return "redirect:/user/history";
+    }
+
 
 }
