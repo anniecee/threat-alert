@@ -26,6 +26,9 @@
                     <div class="mb-3">
                         <input type="password" id="passwordConfirm" name="passwordConfirm" class="form-login form-control form-control-lg" placeholder="Confirm Password" required>
                     </div>
+                    <div class="mb-3 text-center" style="font-size: 14px;">
+                        Password Must Be At Least 8 Characters With 1 Special Character
+                    </div>
                     <!-- Submit button -->
                     <div class="d-grid gap-2">
                         <input class="btn btn-dark" type="submit" value="Sign up"></input>
@@ -37,6 +40,9 @@
                         <input class="btn btn-light btn-back" type="submit" value="Back"></input>
                     </div>
                 </form>
+                <div>
+                    <p th:if="${error}" th:text="${error}" style="color:red;"></p>
+                </div>
             </div>
         </div>
     </div>
