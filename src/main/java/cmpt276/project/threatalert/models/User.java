@@ -1,9 +1,13 @@
 package cmpt276.project.threatalert.models;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -16,6 +20,9 @@ public class User {
     private String password;
     private String type; //"regular" for regular user, "admin" for admin user
 
+    @OneToMany(mappedBy = "user")
+    private List<Website> history;
+
     public User() {}
 
     //constructor for regular user
@@ -23,6 +30,7 @@ public class User {
         this.email = email;
         this.password = password;
         this.type = "regular";
+        this.history = new ArrayList<>();
     }
 
     //constructor for non-regular user (only admin for now)
@@ -30,6 +38,7 @@ public class User {
         this.email = email;
         this.password = password;
         this.type = type;
+        this.history = new ArrayList<>();
     }
 
     public int getUid() {
@@ -62,6 +71,21 @@ public class User {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public List<Website> getHistory() {
+        return history;
+    }
+
+    public void setHistory(List<Website> history) {
+        this.history = history;
+    }
+
+    public void addHistory(Website website) {
+        if (history == null) {
+            history = new ArrayList<>();
+        }
+        history.add(website);
     }
 
 }

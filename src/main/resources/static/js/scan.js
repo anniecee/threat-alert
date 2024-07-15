@@ -5,6 +5,7 @@ function scanLink(event) {
     event.preventDefault(); // prevent page to reload on submit by default
 
     const scannedUrl = document.getElementById("scannedUrl").value;
+    website["link"] = scannedUrl; //add link to website json (see below)
     sendUrl(scannedUrl);
 } 
 
@@ -25,6 +26,10 @@ async function sendUrl(scannedUrl) {
             displayThreatLevel(data);
             displayScanReport(data);
             displayScreenshot(data);
+
+            // Sending Post request
+            console.log("saving to user history")
+            createWebsite();
         })
         .catch((error) => {
             console.error('Error:', error);
@@ -44,6 +49,8 @@ function displayThreatLevel(data) {
         element.innerHTML = content;
         element.style.color = 'green';
     } 
+
+    website["threatlevel"] = malicious.toString();
 }
 
 function displayScanReport(data) {
@@ -75,4 +82,33 @@ function displayScreenshot(data) {
 
     screenshotTitle.innerHTML = heading;
     screenshot.innerHTML = content;
+}
+
+// Below code to be executed when a url has been scanned
+// Add a Website object to User history
+
+// Website object in JSON format
+var website = {};
+
+async function createWebsite() {
+    console.log(JSON.stringify(website));
+
+    const url = "/user/addhistory";
+    // Request options for fetch
+    const options = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(website)
+    }
+
+    try {
+        const response = await fetch(url, options);
+        const result = await response.json();
+        console.log("Success:", result);
+    }
+    catch (error) {
+        console.log("Error:", error);
+    }
 }

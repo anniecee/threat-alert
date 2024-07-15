@@ -13,11 +13,13 @@ public class Website {
     private String threatlevel;
     private Date date;
 
+    @ManyToOne
+    private User user;
+
     public Website() { 
     }
 
-    public Website(int wid, String link, String threatlevel) {
-        this.wid = wid;
+    public Website(String link, String threatlevel) {
         this.link = link;
         this.threatlevel = threatlevel;
         this.date = new Date();    
@@ -54,5 +56,15 @@ public class Website {
     public void setDate(Date date) {
         this.date = date;
     }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    
     
 }
