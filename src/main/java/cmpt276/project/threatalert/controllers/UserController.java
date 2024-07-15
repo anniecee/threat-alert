@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.actuate.autoconfigure.metrics.MetricsProperties.Web;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -155,13 +156,26 @@ public class UserController {
     }
 
     @GetMapping("/admin/userview")
-    public String showUsers(Model model) {
+    public String showUsers(Model model, HttpSession session) {
 
-        List<User> userList = userRepo.findAll();
+        User user = (User)session.getAttribute("session_user");
+        //if not logged in, take to login page
+        if (user == null) {
+            return "/user/login";
+        }
+        //if user is admin, show user view page
+        else if (user.getType().equalsIgnoreCase("admin")) {
+        
+            List<User> userList = userRepo.findAll();
+            model.addAttribute("userList", userList);
+            return "admin/userview";
 
-        model.addAttribute("userList", userList);
-
-        return "admin/userview";
+        }
+        // if not admin, go to home
+        else {
+            return "user/invalid";
+        }
+        
     }
 
     @PostMapping("/user/delete")
@@ -215,6 +229,21 @@ public class UserController {
         return "user/history";
     }
     
-    
+    @PostMapping("/user/deletewebsite")
+    public String deleteWebsite(@RequestParam("wid") int wid, HttpServletResponse response) {
+        
+        Website website = websiteRepo.findByWid(wid);
+
+        User user = website.getUser();
+        System.out.println("removing: " + website.getLink() + " " + website.getDate());
+        user.getHistory().remove(website);
+        userRepo.save(user);
+        
+        websiteRepo.delete(website);
+        response.setStatus(202);
+        
+        return "redirect:/user/history";
+    }
+
 
 }

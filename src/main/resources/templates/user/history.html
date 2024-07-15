@@ -55,9 +55,14 @@
                     <span th:if="${website.threatlevel == 'false'}" style="color: green;">Clean</span>
                 </td>
                 <td>
-                    <span th:text="${#dates.format(website.date, 'yyyy-MM-dd HH:mm:ss')}"></span>
+                    <span th:text="${#dates.format(website.date, 'MMMMM dd, yyyy h:mma')}"></span>
                 </td>
-                <td></td>
+                <td>
+                    <form action="/user/deletewebsite" method="post">
+                        <input type="hidden" name="wid" th:value="${website.wid}">
+                        <input type="submit" class="link-danger link-delete" value="DELETE">
+                    </form>
+                </td>
             </tr>
         </table>
     </div>
