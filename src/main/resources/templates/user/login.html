@@ -7,6 +7,11 @@
     <link rel="stylesheet" href="/css/threatalert.css">
     <title>Log in</title>
 </head>
+
+<script th:if="${signupSuccess}">
+    alert('Signup Successful! You Can Now Login.');
+</script>
+
 <body>
 
     <div class="container-fluid">
@@ -34,6 +39,9 @@
                         <input class="btn btn-light btn-back" type="submit" value="Back"></input>
                     </div>
                 </form>
+                <div>
+                    <p th:if="${error}" th:text="${error}" style="color:red;"></p>
+                </div>
             </div>
         </div>
     </div>
