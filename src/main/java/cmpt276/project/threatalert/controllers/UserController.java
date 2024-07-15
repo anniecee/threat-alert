@@ -156,13 +156,26 @@ public class UserController {
     }
 
     @GetMapping("/admin/userview")
-    public String showUsers(Model model) {
+    public String showUsers(Model model, HttpSession session) {
 
-        List<User> userList = userRepo.findAll();
+        User user = (User)session.getAttribute("session_user");
+        //if not logged in, take to login page
+        if (user == null) {
+            return "/user/login";
+        }
+        //if user is admin, show user view page
+        else if (user.getType().equalsIgnoreCase("admin")) {
+        
+            List<User> userList = userRepo.findAll();
+            model.addAttribute("userList", userList);
+            return "admin/userview";
 
-        model.addAttribute("userList", userList);
-
-        return "admin/userview";
+        }
+        // if not admin, go to home
+        else {
+            return "user/invalid";
+        }
+        
     }
 
     @PostMapping("/user/delete")
@@ -217,16 +230,14 @@ public class UserController {
     }
     
     @PostMapping("/user/deletewebsite")
-    public String deleteWebsite(@RequestParam("website") Website website, HttpServletResponse response) {
+    public String deleteWebsite(@RequestParam("wid") int wid, HttpServletResponse response) {
         
-        // Website website = websiteRepo.findByWid(wid);
-        // List<User> userList = userRepo.findByUid(website.getUser().getUid());
-        // User user = userList.get(0);
+        Website website = websiteRepo.findByWid(wid);
 
-        // List<Website> websiteList = user.getHistory();
-        // websiteList.remove(website);
         User user = website.getUser();
+        System.out.println("removing: " + website.getLink() + " " + website.getDate());
         user.getHistory().remove(website);
+        userRepo.save(user);
         
         websiteRepo.delete(website);
         response.setStatus(202);
