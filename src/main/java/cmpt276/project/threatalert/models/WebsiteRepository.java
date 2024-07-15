@@ -7,5 +7,6 @@ import java.util.List;
 public interface WebsiteRepository extends JpaRepository<Website, Integer> {
 
     List<Website> findByLink(String link);
+    List<Website> findByOrderByDateDesc();
 
 }
