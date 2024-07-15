@@ -26,6 +26,10 @@
     min-width: 80px;
 }
 
+.redirects {
+    margin-right: 25px;
+}
+
 .btn-header:hover {
     /* border: dotted black 1px; */
     width: auto;
@@ -124,8 +128,6 @@
     margin: 15px 0px 0px 15px;
 }
 
-
-
 .header-login {
     font-size: 24px;
     font-weight: bold;
@@ -157,9 +159,9 @@
     width: 400px;
 }
 
-/* admin table view */
+/* admin table view and user history */
 
-.header-av {
+.header-av, .header-sh {
     font-size: 30px;
     font-weight: bold;
 }
@@ -169,7 +171,7 @@
     font-weight: bold;
 }
 
-.table-users {
+.table-users, .table-history {
     border: black;
     width: auto;
 }
@@ -179,6 +181,14 @@ th.id {
 }
 
 th.email, th.password, th.type {
+    min-width: 200px;
+}
+
+th.link {
+    min-width: 300px;
+}
+
+th.threat, th.date {
     min-width: 200px;
 }
 

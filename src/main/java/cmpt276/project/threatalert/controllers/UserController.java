@@ -1,5 +1,8 @@
 package cmpt276.project.threatalert.controllers;
 
+import java.net.http.HttpRequest;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -13,15 +16,22 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import cmpt276.project.threatalert.models.User;
 import cmpt276.project.threatalert.models.UserRepository;
+import cmpt276.project.threatalert.models.Website;
+import cmpt276.project.threatalert.models.WebsiteRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 @Controller
 public class UserController {
 
     @Autowired
     private UserRepository userRepo;
+
+    @Autowired 
+    private WebsiteRepository websiteRepo;
 
     @GetMapping("/user/login")
     public String getLogin(Model model, HttpServletRequest request, HttpSession session) {
@@ -128,6 +138,7 @@ public class UserController {
             
             User user = new User(email, confirmedPassword);
             userRepo.save(user);
+            request.getSession().setAttribute("session_user", user);
             response.setStatus(201);
 
             redirectAttributes.addFlashAttribute("signupSuccess", true);
@@ -160,6 +171,48 @@ public class UserController {
         response.setStatus(202);
 
         return "redirect:/admin/userview";
+    }
+    
+    @PostMapping("/user/addhistory")
+    public void addHistory(@RequestBody Website website, HttpSession session, HttpServletResponse response) {
+        
+        System.out.println("adding history");
+
+        User user = (User) session.getAttribute("session_user");
+        if (user == null) {
+            response.setStatus(400);
+            return;
+        }
+
+        user = userRepo.findByUid(user.getUid()).get(0);
+
+        website.setDate(new Date());
+        website.setUser(user);
+        websiteRepo.save(website);
+
+        user.addHistory(website);
+        userRepo.save(user);
+
+        response.setStatus(200);
+
+    }
+    
+    @GetMapping("/user/history")
+    public String viewHistory(Model model, HttpSession session) {
+
+        System.out.println("viewing history");
+
+        User user = (User) session.getAttribute("session_user");
+        if (user == null) {
+            return "redirect:/user/login";
+        }
+        
+        user = userRepo.findByUid(user.getUid()).get(0);
+
+        List<Website> history = user.getHistory();
+        model.addAttribute("history", history);
+
+        return "user/history";
     }
     
     
