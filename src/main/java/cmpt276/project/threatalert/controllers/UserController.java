@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import cmpt276.project.threatalert.models.User;
 import cmpt276.project.threatalert.models.UserRepository;
@@ -21,7 +22,6 @@ import cmpt276.project.threatalert.models.WebsiteRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-
 import org.springframework.web.bind.annotation.RequestBody;
 
 
@@ -69,12 +69,18 @@ public class UserController {
 
         if (userList.isEmpty()) {
             
+            model.addAttribute("error", "Invalid Email or Password.");
             return "user/login";
 
         } else {
 
             User user = userList.get(0);
-            request.getSession().setAttribute("session_user", user);
+
+            session.invalidate();
+
+            session = request.getSession(true);
+            session.setAttribute("session_user", user);
+
             model.addAttribute("user", user);
 
             //show admin page if user is an admin
@@ -106,7 +112,7 @@ public class UserController {
     }
 
     @PostMapping("/user/signup")
-    public String signup(@RequestParam Map<String, String> formData, Model model, HttpServletRequest request, HttpSession session, HttpServletResponse response) {
+    public String signup(@RequestParam Map<String, String> formData, Model model, HttpServletRequest request, HttpSession session, HttpServletResponse response, RedirectAttributes redirectAttributes) {
 
         String email = formData.get("email");
         String password = formData.get("password");
@@ -114,9 +120,15 @@ public class UserController {
 
         if (!password.equals(confirmedPassword)) {
 
-            model.addAttribute("error", "Passwords do not match");
+            model.addAttribute("error", "Passwords Do Not Match.");
             return "user/signup";
 
+        }
+
+        //password restrictions: minimum length of 8 & at least one special character
+        if (password.length() < 8 || !password.matches(".*[!@#$%^&*()-].*")) {
+            model.addAttribute("error", "Password Must Be At Least 8 Characters & Contain At Least One Special Character.");
+            return "user/signup";
         }
 
         //check if email is already in repository
@@ -129,12 +141,14 @@ public class UserController {
             userRepo.save(user);
             request.getSession().setAttribute("session_user", user);
             response.setStatus(201);
-            return "redirect:/scan.html";
+
+            redirectAttributes.addFlashAttribute("signupSuccess", true);
+            return "redirect:/user/login";
 
         //if in there, redirect back to login saying already have an account
         } else {
 
-            model.addAttribute("error", "Account linked with email already exists");
+            model.addAttribute("error", "Account Linked With Email Already Exists.");
             return "user/signup";
 
         }
