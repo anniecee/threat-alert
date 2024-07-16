@@ -1,7 +1,5 @@
 package cmpt276.project.threatalert.models;
 
-import cmpt276.project.threatalert.models.User;
-import cmpt276.project.threatalert.models.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -10,10 +8,8 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -27,11 +23,13 @@ public class UserRepositoryTest {
 
     @BeforeEach
     public void setUp() {
+        // Initializes mock objects before each test
         MockitoAnnotations.openMocks(this);
     }
 
     @Test
     public void testFindByEmailAndPassword() {
+        // Tests the findByEmailAndPassword method of the UserRepository
         String email = "testuser@example.com";
         String password = "password123";
         User user = new User();
@@ -49,6 +47,7 @@ public class UserRepositoryTest {
 
     @Test
     public void testFindByEmail() {
+        // Tests the findByEmail method of the UserRepository
         String email = "testuser@example.com";
         User user = new User();
         user.setEmail(email);
@@ -63,6 +62,7 @@ public class UserRepositoryTest {
 
     @Test
     public void testFindByUid() {
+        // Tests the findByUid method of the UserRepository
         int uid = 1;
         User user = new User();
         user.setUid(uid);
