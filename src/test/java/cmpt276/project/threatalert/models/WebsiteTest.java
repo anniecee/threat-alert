@@ -22,7 +22,7 @@ public class WebsiteTest {
         int wid = 1;
         String link = "http://example.com";
         String threatlevel = "Clean";
-        Website website = new Website(wid, link, threatlevel);
+        Website website = new Website( link, threatlevel);
 
         assertEquals(wid, website.getWid());
         assertEquals(link, website.getLink());
