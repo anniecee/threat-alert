@@ -32,7 +32,7 @@ public class WebsiteRepositoryTest {
     @Test
     public void testFindByLink() {
         String link = "http://example.com";
-        Website website = new Website(1, link, "Clean");
+        Website website = new Website( link, "Clean");
         List<Website> expectedWebsites = new ArrayList<>();
         expectedWebsites.add(website);
 
