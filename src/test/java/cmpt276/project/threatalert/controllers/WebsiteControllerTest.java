@@ -16,6 +16,8 @@ public class WebsiteControllerTest {
 
     @Test
     public void testLanding() throws Exception {
+        // Tests the GET /landing endpoint
+        // Verifies that the status is OK (200) and the view name is "website/landing"
         mockMvc.perform(get("/landing"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("website/landing"));
@@ -23,6 +25,8 @@ public class WebsiteControllerTest {
 
     @Test
     public void testProcess() throws Exception {
+        // Tests the GET / endpoint
+        // Verifies that the status is a redirection (3xx) and the redirected URL is "landing"
         mockMvc.perform(get("/"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("landing"));
@@ -30,6 +34,8 @@ public class WebsiteControllerTest {
 
     @Test
     public void testBack() throws Exception {
+        // Tests the GET /back endpoint
+        // Verifies that the status is a redirection (3xx) and the redirected URL is "/landing"
         mockMvc.perform(get("/back"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/landing"));

@@ -1,7 +1,5 @@
 package cmpt276.project.threatalert.models;
 
-import cmpt276.project.threatalert.models.Website;
-import cmpt276.project.threatalert.models.WebsiteRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -26,20 +24,25 @@ public class WebsiteRepositoryTest {
 
     @BeforeEach
     public void setUp() {
+        // Initializes mock objects before each test
         MockitoAnnotations.openMocks(this);
     }
 
     @Test
     public void testFindByLink() {
+        // Tests the findByLink method of the WebsiteRepository
         String link = "http://example.com";
-        Website website = new Website( link, "Clean");
+        Website website = new Website(link, "Clean");
         List<Website> expectedWebsites = new ArrayList<>();
         expectedWebsites.add(website);
 
+        // Sets up the mock behavior
         when(websiteRepository.findByLink(link)).thenReturn(expectedWebsites);
 
+        // Calls the method to test
         List<Website> foundWebsites = websiteRepository.findByLink(link);
 
+        // Asserts the expected behavior
         assertEquals(1, foundWebsites.size());
         assertEquals(link, foundWebsites.get(0).getLink());
         assertEquals("Clean", foundWebsites.get(0).getThreatlevel());

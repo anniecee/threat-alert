@@ -1,6 +1,5 @@
 package cmpt276.project.threatalert.models;
 
-import cmpt276.project.threatalert.models.User;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -8,6 +7,7 @@ public class UserTest {
 
     @Test
     public void testDefaultConstructor() {
+        // Tests the default constructor of the User class
         User user = new User();
         assertNull(user.getEmail());
         assertNull(user.getPassword());
@@ -17,6 +17,7 @@ public class UserTest {
 
     @Test
     public void testConstructorForRegularUser() {
+        // Tests the constructor for a regular user
         String email = "test@example.com";
         String password = "password123";
         User user = new User(email, password);
@@ -28,6 +29,7 @@ public class UserTest {
 
     @Test
     public void testConstructorForNonRegularUser() {
+        // Tests the constructor for a non-regular user (e.g., admin)
         String email = "admin@example.com";
         String password = "admin123";
         String type = "admin";
@@ -40,6 +42,7 @@ public class UserTest {
 
     @Test
     public void testSetAndGetUid() {
+        // Tests the setter and getter for the uid field
         User user = new User();
         int uid = 1;
         user.setUid(uid);
@@ -48,6 +51,7 @@ public class UserTest {
 
     @Test
     public void testSetAndGetEmail() {
+        // Tests the setter and getter for the email field
         User user = new User();
         String email = "test@example.com";
         user.setEmail(email);
@@ -56,6 +60,7 @@ public class UserTest {
 
     @Test
     public void testSetAndGetPassword() {
+        // Tests the setter and getter for the password field
         User user = new User();
         String password = "password123";
         user.setPassword(password);
@@ -64,6 +69,7 @@ public class UserTest {
 
     @Test
     public void testSetAndGetType() {
+        // Tests the setter and getter for the type field
         User user = new User();
         String type = "admin";
         user.setType(type);
