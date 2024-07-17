@@ -7,6 +7,8 @@ function scanLink(event) {
     const scannedUrl = document.getElementById("scannedUrl").value;
     website["link"] = scannedUrl; //add link to website json (see below)
     sendUrl(scannedUrl);
+    
+    
 } 
 
 // POST request to send scanned URL
@@ -26,6 +28,7 @@ async function sendUrl(scannedUrl) {
             displayThreatLevel(data);
             displayScanReport(data);
             displayScreenshot(data);
+            displayCommentButton();
 
             // Sending Post request
             console.log("saving to user history")
@@ -84,6 +87,12 @@ function displayScreenshot(data) {
     screenshot.innerHTML = content;
 }
 
+function displayCommentButton() {
+    const commentButton = document.getElementById('commentButton');
+    commentButton.innerHTML = "<a href='/viewcomment' class='btn btn-info' role='button'>Click here to view comments</a>";
+    // "<button class='btn btn-primary ml-2' href='/comment' type='submit' style='border: 2px solid;'>Comments</button> ";
+}
+
 // Below code to be executed when a url has been scanned
 // Add a Website object to User history
 
@@ -112,3 +121,5 @@ async function createWebsite() {
         console.log("Error:", error);
     }
 }
+
+

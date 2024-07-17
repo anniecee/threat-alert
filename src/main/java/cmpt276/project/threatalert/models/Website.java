@@ -16,6 +16,9 @@ public class Website {
     @ManyToOne
     private User user;
 
+    @OneToMany(mappedBy = "website")
+    private List<Comment> comments;
+
     public Website() { 
     }
 
@@ -65,6 +68,19 @@ public class Website {
         this.user = user;
     }
 
+    public List<Comment> getComment() {
+        return comments;
+    }
+
+    public void setComment(List<Comment> comment) {
+        this.comments = comment;
+    }
     
+    public void addComment(Comment comment) {
+        if (comments == null) {
+            comments = new ArrayList<>();
+        }
+        comments.add(comment);
+    }
     
 }

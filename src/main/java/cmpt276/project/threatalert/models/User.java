@@ -23,6 +23,9 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Website> history;
 
+    @OneToMany(mappedBy = "user")
+    private List<Comment> comments;
+
     public User() {}
 
     //constructor for regular user

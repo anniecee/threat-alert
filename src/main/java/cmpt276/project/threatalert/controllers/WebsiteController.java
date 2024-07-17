@@ -38,5 +38,7 @@ public class WebsiteController {
     public String home() {
         return "redirect:/scan.html";
     }
+
+    
     
 }
