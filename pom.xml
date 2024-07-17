@@ -83,7 +83,21 @@
     		<artifactId>mockito-core</artifactId>
         	<scope>test</scope>
     	</dependency>
+
+		<dependency>
+			<groupId>com.github.Cloudmersive</groupId>
+			<artifactId>Cloudmersive.APIClient.Java</artifactId>
+			<version>v4.25</version>
+		</dependency>
+		
 	</dependencies>
+
+	<repositories>
+		<repository>
+			<id>jitpack.io</id>
+			<url>https://jitpack.io</url>
+		</repository>
+	</repositories>
 
 	<build>
 		<plugins>
