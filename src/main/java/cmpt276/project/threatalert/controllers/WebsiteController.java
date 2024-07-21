@@ -1,5 +1,6 @@
 package cmpt276.project.threatalert.controllers;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -9,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.view.RedirectView;
 
+import cmpt276.project.threatalert.models.CommentRepository;
 import cmpt276.project.threatalert.models.User;
 import cmpt276.project.threatalert.models.Website;
 import cmpt276.project.threatalert.models.WebsiteRepository;
@@ -61,9 +63,20 @@ public class WebsiteController {
         //check if link is already in repository
         List<Website> websiteList = websiteRepo.findByLink(newlink);
 
-        //check if email is already in repository
-        List<User> userList = userRepo.findByEmail(email);
 
+        // if no, create the website object with an empty list of comments
+        Date newDate = new Date();
+        if (websiteList.isEmpty()) {
+            Website website = new Website(newDate, newlink);
+            websiteRepo.save(website);
+
+            return;
+        }
+        // else, access and read comments from website with that link
+        Website existingWebsite = websiteList.get(0);
+
+        
+        
         
         return;
     }
