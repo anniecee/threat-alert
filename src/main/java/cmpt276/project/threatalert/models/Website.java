@@ -9,9 +9,12 @@ public class Website {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int wid;
-    private String link;
+
     private String threatlevel;
     private Date date;
+
+    @Column(unique=true)
+    private String link;
 
     @ManyToOne
     private User user;
@@ -20,6 +23,17 @@ public class Website {
     private List<Comment> comments;
 
     public Website() { 
+    }
+
+    public Website(Date date, String link, List<Comment> comments) {
+        this.date = date;
+        this.link = link;
+        this.comments = comments;
+    }
+
+    public Website(Date date, String link) {
+        this.date = date;
+        this.link = link;
     }
 
     public Website(String link, String threatlevel) {

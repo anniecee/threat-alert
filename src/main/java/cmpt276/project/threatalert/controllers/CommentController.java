@@ -65,7 +65,7 @@ public class CommentController {
     }
 
     @GetMapping("/viewcomment")
-    public String viewComment(Model model, HttpServletRequest request, HttpSession session) {
+    public String viewComment(Model model, HttpSession session) {
 
         System.out.println("viewing comment");
 
@@ -74,13 +74,13 @@ public class CommentController {
             return "redirect:/user/login";
         }
 
-        System.out.println("viewing comment2");
         //Get the most recent scanned website
-        Website website = user.getHistory().get(0);
-       
-        //Website website = (Website) session.getAttribute("session_website");
-        System.out.println("viewing comment3");
+        
+        System.out.println("viewing comment2");
+        //Website website = user.getHistory().get(user.getHistory().size()-1);
+        Website website = user.getHistory().get
 
+        System.out.println("viewing comment3");
 
         List<Comment> comments = website.getComment();
         System.out.println("viewing comment4");
