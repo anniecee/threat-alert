@@ -245,5 +245,20 @@ public class UserController {
         return "redirect:/user/history";
     }
 
+    @GetMapping("/user/profile")
+    public String viewProfile(Model model, HttpSession session) {
 
+        System.out.println("viewing profile");
+
+        User user = (User) session.getAttribute("session_user");
+        if (user == null) {
+            return "redirect:/user/login";
+        }
+        
+        user = userRepo.findByUid(user.getUid()).get(0);
+
+        model.addAttribute("user", user);
+
+        return "user/profile";
+    }
 }
