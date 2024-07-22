@@ -261,4 +261,24 @@ public class UserController {
 
         return "user/profile";
     }
+
+    // @PostMapping("/user/addurl")
+    // public void addActivity(@RequestBody User user, HttpSession session, HttpServletResponse response) {
+        
+    //     System.out.println("adding url");
+
+    //     User user = (User) session.getAttribute("session_user");
+    //     if (user == null) {
+    //         response.setStatus(400);
+    //         return;
+    //     }
+
+    //     user = userRepo.findByUid(user.getUid()).get(0);
+    //     int currentTotal = user.getTotalUrl();
+
+    //     user.setTotalUrl(currentTotal++);
+    //     userRepo.save(user);
+
+    //     response.setStatus(200);
+    // }
 }

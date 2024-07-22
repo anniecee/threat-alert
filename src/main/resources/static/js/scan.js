@@ -30,6 +30,9 @@ async function sendUrl(scannedUrl) {
             // Sending Post request
             console.log("saving to user history");
             createWebsite();
+
+            // console.log("increment total URLs of user")
+            // addUrl();
         })
         .catch((error) => {
             console.error('Error:', error);
@@ -112,3 +115,24 @@ async function createWebsite() {
         console.log("Error:", error);
     }
 }
+
+// // Increment Total URLs to User's activity summary
+// async function addUrl() {
+//     const url = "/user/addurl";
+//     // Request options for fetch
+//     const options = {
+//         method: 'POST',
+//         headers: {
+//             'Content-Type': 'application/json'
+//         }
+//     }
+
+//     try {
+//         const response = await fetch(url, options);
+//         const result = await response.json();
+//         console.log("Success:", result);
+//     }
+//     catch (error) {
+//         console.log("Error:", error);
+//     }
+// }

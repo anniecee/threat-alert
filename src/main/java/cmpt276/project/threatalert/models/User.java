@@ -20,6 +20,9 @@ public class User {
     private String email;
     private String password;
     private String type; //"regular" for regular user, "admin" for admin user
+    // private int totalUrl = 0;
+    // private int totalReview = 0;
+    // private int totalBookmark = 0;
 
     @OneToMany(mappedBy = "user")
     private List<Website> history;
@@ -33,6 +36,9 @@ public class User {
         this.password = password;
         this.type = "regular";
         this.history = new ArrayList<>();
+        // this.totalUrl = 0;
+        // this.totalReview = 0;
+        // this.totalBookmark = 0;
     }
 
     //constructor for non-regular user (only admin for now)
@@ -43,6 +49,9 @@ public class User {
         this.password = password;
         this.type = type;
         this.history = new ArrayList<>();
+        // this.totalUrl = 0;
+        // this.totalReview = 0;
+        // this.totalBookmark = 0;
     }
 
     public int getUid() {
@@ -100,6 +109,30 @@ public class User {
     public void setDate(Date date) {
         this.date = date;
     }
+
+    // public int getTotalUrl() {
+    //     return totalUrl;
+    // }
+
+    // public void setTotalUrl(int totalUrl) {
+    //     this.totalUrl = totalUrl;
+    // }
+
+    // public int getTotalReview() {
+    //     return totalReview;
+    // }
+
+    // public void setTotalReview(int totalReview) {
+    //     this.totalReview = totalReview;
+    // }
+
+    // public int getTotalBookmark() {
+    //     return totalBookmark;
+    // }
+
+    // public void setTotalBookmark(int totalBookmark) {
+    //     this.totalBookmark = totalBookmark;
+    // }
 
     public void addHistory(Website website) {
         if (history == null) {
