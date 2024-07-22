@@ -28,7 +28,7 @@ async function sendUrl(scannedUrl) {
             displayScreenshot(data);
 
             // Sending Post request
-            console.log("saving to user history")
+            console.log("saving to user history");
             createWebsite();
         })
         .catch((error) => {
