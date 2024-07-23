@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>URL Scanner</title>
+</head>
+<body>
+<h1>URL Scanner</h1>
+<form action="#" th:action="@{/scan}" method="post">
+    <label for="url">Enter URL:</label>
+    <input type="text" id="url" name="url" required>
+    <button type="submit">Scan URL</button>
+</form>
+
+<div th:if="${result}">
+    <h2>Scan Results:</h2>
+    <pre th:text="${result}"></pre>
+</div>
+</body>
+</html>
