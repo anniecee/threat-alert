@@ -32,6 +32,7 @@ async function sendUrl(scannedUrl) {
             // Sending Post request
             console.log("saving to user history")
             addHistory();
+
             console.log("saving website object and display comments")
             createWebsite();
         })
@@ -123,7 +124,6 @@ async function addHistory() {
     }
 }
 
-
 async function createWebsite() {
     console.log(JSON.stringify(website));
 
@@ -150,3 +150,5 @@ async function createWebsite() {
         console.log("Error:", error);
     }
 }
+
+
