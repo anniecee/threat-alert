@@ -8,7 +8,6 @@ function scanLink(event) {
     website["link"] = scannedUrl; //add link to website json (see below)
     sendUrl(scannedUrl);
     
-    
 } 
 
 // POST request to send scanned URL
@@ -28,10 +27,13 @@ async function sendUrl(scannedUrl) {
             displayThreatLevel(data);
             displayScanReport(data);
             displayScreenshot(data);
-            displayCommentButton();
+            //displayCommentButton();
 
             // Sending Post request
             console.log("saving to user history")
+            addHistory();
+
+            console.log("saving website object and display comments")
             createWebsite();
         })
         .catch((error) => {
@@ -87,11 +89,11 @@ function displayScreenshot(data) {
     screenshot.innerHTML = content;
 }
 
-function displayCommentButton() {
-    const commentButton = document.getElementById('commentButton');
-    commentButton.innerHTML = "<a href='/viewcomment' class='btn btn-info' role='button'>Click here to view comments</a>";
-    // "<button class='btn btn-primary ml-2' href='/comment' type='submit' style='border: 2px solid;'>Comments</button> ";
-}
+// function displayCommentButton() {
+//     const commentButton = document.getElementById('commentButton');
+//     commentButton.innerHTML = "<a href='/viewcomment' class='btn btn-info' role='button'>Click here to view comments</a>";
+//     // "<button class='btn btn-primary ml-2' href='/comment' type='submit' style='border: 2px solid;'>Comments</button> ";
+// }
 
 // Below code to be executed when a url has been scanned
 // Add a Website object to User history
@@ -99,7 +101,7 @@ function displayCommentButton() {
 // Website object in JSON format
 var website = {};
 
-async function createWebsite() {
+async function addHistory() {
     console.log(JSON.stringify(website));
 
     const url = "/user/addhistory";
@@ -116,6 +118,33 @@ async function createWebsite() {
         const response = await fetch(url, options);
         const result = await response.json();
         console.log("Success:", result);
+    }
+    catch (error) {
+        console.log("Error:", error);
+    }
+}
+
+async function createWebsite() {
+    console.log(JSON.stringify(website));
+
+    const url = "/scanning";
+    // Request options for fetch
+    const options = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(website)
+    }
+
+    try {
+        const response = await fetch(url, options);
+        const result = await response.json();
+        console.log("Success:", result);
+
+        // Update the DOM here with the result
+        // For example, if you have an element with id 'website-info'
+        document.getElementById('comments').innerText = 'TESTING:' + JSON.stringify(result);
     }
     catch (error) {
         console.log("Error:", error);

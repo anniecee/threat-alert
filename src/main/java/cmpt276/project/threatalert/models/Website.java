@@ -82,11 +82,11 @@ public class Website {
         this.user = user;
     }
 
-    public List<Comment> getComment() {
+    public List<Comment> getComments() {
         return comments;
     }
 
-    public void setComment(List<Comment> comment) {
+    public void setComments(List<Comment> comment) {
         this.comments = comment;
     }
     
