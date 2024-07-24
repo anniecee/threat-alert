@@ -49,7 +49,8 @@ public class UserController {
             } 
             //show scan page for regular user
             else {
-                return "redirect:/scan.html";
+                // return "redirect:/scan.html";
+                return "scan/urlscan";
             }
 
         }
@@ -87,7 +88,7 @@ public class UserController {
             //show scan page for regular user
             else {
                 // return "redirect:/scan.html";
-                return "urlscan";
+                return "scan/urlscan";
             }
 
         }

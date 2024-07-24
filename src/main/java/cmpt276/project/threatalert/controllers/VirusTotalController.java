@@ -8,6 +8,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
 import cmpt276.project.threatalert.services.VirusTotalService;
 
 import java.io.IOException;
@@ -24,13 +27,15 @@ public class VirusTotalController {
     public String scanUrl(@RequestParam("url") String url, Model model) {
         logger.info("Received URL for scanning: {}", url);
         try {
-            String result = virusTotalService.scanUrl(url);
+            String resultString = virusTotalService.scanUrl(url);
+            JsonObject result = JsonParser.parseString(resultString).getAsJsonObject();
             model.addAttribute("result", result);
+            // model.addAttribute("result", result.getAsJsonObject("data"));
         } catch (IOException | InterruptedException e) {
             logger.error("Error scanning URL: {}", e.getMessage(), e);
             model.addAttribute("result", "Error: " + e.getMessage());
         }
 
-        return "urlscan";
+        return "scan/urlscan";
     }
 }
