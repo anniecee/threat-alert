@@ -9,6 +9,7 @@ import cmpt276.project.threatalert.models.UserRepository;
 import cmpt276.project.threatalert.models.Website;
 import cmpt276.project.threatalert.models.WebsiteRepository;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import java.util.Date;
@@ -29,8 +30,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class CommentController {
     
-    @PostMapping("/website/comment/{wid}")
-    public String postMethodName(@RequestBody String entity) {
+    @PostMapping("/addComment")
+    public String signup(@RequestParam Map<String, String> formData, Model model, HttpServletRequest request, HttpSession session, HttpServletResponse response, RedirectAttributes redirectAttributes) {
         //TODO: process POST request
         
         return entity;

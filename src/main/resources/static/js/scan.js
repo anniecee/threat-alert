@@ -27,7 +27,7 @@ async function sendUrl(scannedUrl) {
             displayThreatLevel(data);
             displayScanReport(data);
             displayScreenshot(data);
-            //displayCommentButton();
+            displayCommentBar();
 
             // Sending Post request
             console.log("saving to user history")
@@ -89,11 +89,39 @@ function displayScreenshot(data) {
     screenshot.innerHTML = content;
 }
 
-// function displayCommentButton() {
-//     const commentButton = document.getElementById('commentButton');
-//     commentButton.innerHTML = "<a href='/viewcomment' class='btn btn-info' role='button'>Click here to view comments</a>";
-//     // "<button class='btn btn-primary ml-2' href='/comment' type='submit' style='border: 2px solid;'>Comments</button> ";
-// }
+function displayCommentBar() {
+
+    const commentDiv = document.createElement('div');
+    commentDiv.style.display = 'flex';
+    commentDiv.style.justifyContent = 'center';
+    commentDiv.style.alignItems = 'center';
+    commentDiv.style.flexDirection = 'column';
+
+    // Create a text area for the comment bar
+    const commentBar = document.createElement('textarea');
+    commentBar.id = 'commentBar';
+    commentBar.placeholder = 'Enter your comment here...';
+    commentBar.style.width = '100%'; // Make the comment bar flexible
+
+    // Create a button to confirm the comment
+    const confirmButton = document.createElement('button');
+    confirmButton.innerHTML = 'Enter';
+    confirmButton.onclick = function() {
+        // You can add functionality here to handle the comment confirmation
+        console.log('Comment confirmed: ', commentBar.value);
+    };
+
+    commentDiv.appendChild(commentBar);
+    commentDiv.appendChild(confirmButton);
+
+    // Get the element where you want to add the comment bar and button
+    const commentButton = document.getElementById('commentBar');
+
+    // Append the comment bar and confirm button to the element
+    commentButton.appendChild(commentBar);
+    commentButton.appendChild(confirmButton);
+    commentButton.appendChild(commentDiv);
+}
 
 // Below code to be executed when a url has been scanned
 // Add a Website object to User history
@@ -145,6 +173,7 @@ async function createWebsite() {
         // Update the DOM here with the result
         // For example, if you have an element with id 'website-info'
         document.getElementById('comments').innerText = 'TESTING:' + JSON.stringify(result);
+        //document.getElementById('addingComments').innerText = 
     }
     catch (error) {
         console.log("Error:", error);
