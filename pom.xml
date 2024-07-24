@@ -89,8 +89,7 @@
 			<artifactId>Cloudmersive.APIClient.Java</artifactId>
 			<version>v4.25</version>
 		</dependency>
-
-	</dependencies>
+ </dependencies>
 
 	<repositories>
 		<repository>
