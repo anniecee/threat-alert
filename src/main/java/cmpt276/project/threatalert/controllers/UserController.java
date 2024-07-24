@@ -238,7 +238,7 @@ public class UserController {
         userRepo.save(user);
         
         websiteRepo.delete(website);
-        response.setStatus(202);
+        response.setStatus(HttpServletResponse.SC_GONE);
         
         return "redirect:/user/history";
     }
