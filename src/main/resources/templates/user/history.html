@@ -43,22 +43,47 @@
         <table class="table table-history">
             <tr>
                 <th class="link">URL</th>
-                <th class="threat">Threat Level</th>
+                <th class="threat">Threats</th>
                 <th class="date">Date</th>
-                <th class="delete"></th>
+                <th class="options">Options</th>
             </tr>
             <tr th:each="website:${history}">
                 <td>
                     <span th:text="${website.link}"></span>
                 </td>
-                <td>
-                    <span th:if="${website.threatlevel == 'true'}" style="color: red;">Warning</span>
-                    <span th:if="${website.threatlevel == 'false'}" style="color: green;">Clean</span>
+                <td style="padding: 0;">
+                    <table class="table table-borderless table-inner">
+                        <tr class="top-row">
+                            <td class="threat-type">Malicious: </td>
+                            <td class="threat-value" th:text="${website.malicious}"></td>
+                        </tr>
+                        <tr>
+                            <td>Suspicious: </td>
+                            <td th:text="${website.suspicious}"></td>
+                        </tr>
+                        <tr>
+                            <td>Undetected: </td>
+                            <td th:text="${website.undetected}"></td>
+                        </tr>
+                        <tr>
+                            <td>Harmless: </td>
+                            <td th:text="${website.harmless}"></td>
+                        </tr>
+                        <tr class="bot-row">
+                            <td>Timeout: </td>
+                            <td th:text="${website.timeout}"></td>
+                        </tr>
+                    </table>
+
                 </td>
                 <td>
                     <span th:text="${#dates.format(website.date, 'MMMMM dd, yyyy h:mma')}"></span>
                 </td>
                 <td>
+                    <!-- <form action="/user/bookmarkwebsite" method="post"> -->
+                        <input type="hidden" name="wid" th:value="${website.wid}">
+                        <input type="submit" class="link-primary link-delete" value="BOOKMARK">
+                    <!-- </form> -->
                     <form action="/user/deletewebsite" method="post">
                         <input type="hidden" name="wid" th:value="${website.wid}">
                         <input type="submit" class="link-danger link-delete" value="DELETE">
