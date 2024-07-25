@@ -47,7 +47,8 @@
                 <th class="date">Date</th>
                 <th class="options">Options</th>
             </tr>
-            <tr th:each="website:${history}">
+            <tr th:each="i : ${#numbers.sequence(history.size() - 1, 0)}"
+                th:with="website=${history[i]}">
                 <td>
                     <span th:text="${website.link}"></span>
                 </td>

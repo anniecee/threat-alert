@@ -63,6 +63,7 @@ public class VirusTotalController {
     }
 
         private Website createWebsite(String url, String result) {
+            //result is the json string
             JsonObject jsonObject = JsonParser.parseString(result).getAsJsonObject();
             jsonObject = jsonObject.getAsJsonObject("data").getAsJsonObject("attributes").getAsJsonObject("stats");
             int malicious = jsonObject.get("malicious").getAsInt();
