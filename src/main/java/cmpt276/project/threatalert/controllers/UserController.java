@@ -7,9 +7,11 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import cmpt276.project.threatalert.models.User;
@@ -139,7 +141,7 @@ public class UserController {
             User user = new User(email, confirmedPassword);
             userRepo.save(user);
             request.getSession().setAttribute("session_user", user);
-            response.setStatus(201);
+            response.setStatus(HttpServletResponse.SC_CREATED);
 
             redirectAttributes.addFlashAttribute("signupSuccess", true);
             return "redirect:/user/login";
@@ -181,11 +183,12 @@ public class UserController {
     public String deleteUser(@RequestParam("uid") int uid, HttpServletResponse response) {
 
         userRepo.deleteById(uid);
-        response.setStatus(202);
+        response.setStatus(HttpServletResponse.SC_GONE);
 
         return "redirect:/admin/userview";
     }
-    
+
+    /* 
     @PostMapping("/user/addhistory")
     public void addHistory(@RequestBody Website website, HttpSession session, HttpServletResponse response) {
         
@@ -209,6 +212,7 @@ public class UserController {
         response.setStatus(200);
 
     }
+    */
     
     @GetMapping("/user/history")
     public String viewHistory(Model model, HttpSession session) {
@@ -228,21 +232,47 @@ public class UserController {
         return "user/history";
     }
     
-    @PostMapping("/user/deletewebsite")
-    public String deleteWebsite(@RequestParam("wid") int wid, HttpServletResponse response) {
-        
-        Website website = websiteRepo.findByWid(wid);
+    // Receives Delete Mapping request from delete.js, and returns response back to it
+    @DeleteMapping("/user/deletefromhistory")
+    @ResponseBody
+    public String deleteWebsite(@RequestBody String wid, HttpServletResponse response) {
 
-        User user = website.getUser();
-        System.out.println("removing: " + website.getLink() + " " + website.getDate());
-        user.getHistory().remove(website);
-        userRepo.save(user);
-        
-        websiteRepo.delete(website);
-        response.setStatus(HttpServletResponse.SC_GONE);
-        
-        return "redirect:/user/history";
+        System.out.println("Received wid: " + wid);
+        int widInt = Integer.parseInt(wid);
+            
+        List<Website> websites = websiteRepo.findByWid(widInt);
+
+        if (!websites.isEmpty()) {
+            Website website = websites.get(0);
+
+            User user = website.getUser();
+            System.out.println("removing: " + website.getLink() + " " + website.getDate());
+            user.getHistory().remove(website);
+            userRepo.save(user);
+            
+            websiteRepo.delete(website);
+            response.setStatus(HttpServletResponse.SC_GONE);
+
+            return "Received " + wid + " and deleted";
+        }
+        else {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            return "Received " + wid + " but unable to delete";
+        }
+
     }
+
+    @PostMapping("/user/addbookmark")
+    public void addBookmark(@RequestParam("wid") int wid, HttpSession session) {
+        
+        List<Website> websites = websiteRepo.findByWid(wid);
+        if (!websites.isEmpty()) {
+            Website website = websites.get(0);
+        }
+
+
+    }
+    
 
     @GetMapping("/user/profile")
     public String viewProfile(Model model, HttpSession session) {

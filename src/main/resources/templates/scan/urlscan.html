@@ -5,36 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>URL Scanner</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
-</head>
+    <link rel="stylesheet" href="/css/threatalert.css">
+  </head>
 
 <body>
+    
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <!-- logo -->
-        <a class="navbar-brand mx-4 py-3" href="/landing">
-            <img src="img/ThreatAlertLogo.jpg" width="70" class="d-inline-block align-top" alt=""><font size="6"><b>ThreatAlert</b></font>
-        </a>
-        <div class="container-fluid">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light navbar-header">
+      <!-- logo -->
+      <a class="navbar-brand mx-4 py-3" href="/landing">
+          <img src="/img/ThreatAlertLogo.png" width="70" class="d-inline-block align-top" alt=""><font size="6"><b>ThreatAlert</b></font>
+      </a>
+      <div class="container-fluid">
 
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-              <span class="navbar-toggler-icon"></span>
-            </button>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
 
-            <div class="collapse navbar-collapse navbar justify-content-end" id="navbarNavAltMarkup">
+          <div class="collapse navbar-collapse navbar justify-content-end" id="navbarNavAltMarkup">
               <div class="navbar-nav">
                   <div class="redirects">
                       <a class="btn btn-header" href="/home">Home<span class="sr-only"></span></a>
                       <a class="btn btn-header" href="/user/history">History<span class="sr-only"></span></a>
                       <a class="btn btn-header" href="/user/profile">Profile<span class="sr-only"></span></a>
-                    </div>
+                  </div>
                 <!-- <a class="nav-item nav-link mx-4" href="#">Bookmark</a>
-                <a class="nav-item nav-link mx-4" href="#">History</a> -->
+                <a class="nav-item nav-link mx-4" href="#">History</a>
+                <a class="nav-item nav-link mx-4" href="#">Profile</a> -->
                 <a class="btn btn-dark" href="/user/logout" style="margin-right: 20px;">Log Out</a>
 
               </div>
           </div>
-          </div>
-    </nav>
+        </div>
+  </nav>
 
     <br><br><br>
     <!-- URL scanner and button -->
@@ -49,17 +52,20 @@
     <!-- Result -->
     <br><br><br>
     <div class="container-fluid" style="width: 80%; margin: auto;" th:if="${result}">
-        <span th:if="${malicious + suspicious > 5}" style="color: orange;"><h3> Threat Level: Warning! </h3></span>
-        <span th:unless="${malicious + suspicious > 5}" style="color: green;"><h3> Threat Level: Clean! </h3></span>
+
+        <!-- if warning, style orange, otherwise green -->
+        <h3 th:style="${website.threatlevel == 'Warning!' ? 'color: orange' : 'color: green'}">
+          <span th:text="${website.threatlevel}"></span>
+        </h3>
         
         <br><br>
         <div>
         <h4>Scan Report:</h4>
-          <b style="color: red;">Malicious: </b><span th:text="${malicious}"></span><br>
-          <b style="color: red;">Suspicious: </b><span th:text="${suspicious}"></span><br>
-          <b style="color: green;">Harmless: </b><span th:text="${harmless}"></span><br>
-          <b style="color: grey;">Undetected: </b><span th:text="${undetected}"></span><br>
-          <b style="color: grey;">Timeout: </b><span th:text="${timeout}"></span><br>
+          <b style="color: red;">Malicious: </b><span th:text="${website.malicious}"></span><br>
+          <b style="color: red;">Suspicious: </b><span th:text="${website.suspicious}"></span><br>
+          <b style="color: green;">Harmless: </b><span th:text="${website.harmless}"></span><br>
+          <b style="color: grey;">Undetected: </b><span th:text="${website.undetected}"></span><br>
+          <b style="color: grey;">Timeout: </b><span th:text="${website.timeout}"></span><br>
         </div>
         
         <br><br>
@@ -74,11 +80,17 @@
           </thead>
           <tr th:each="vendor : ${vendorResults}">
             <b><td th:text ="${vendor.get('engine_name')}" ></td></b>
-            <td th:text ="${vendor.get('category')}" ></td>
-            <td th:text ="${vendor.get('result')}" ></td>           
+            <td style="text-transform: capitalize;" th:text ="${vendor.get('category')}" ></td>
+            <td style="text-transform: capitalize;" th:text ="${vendor.get('result')}" ></td>           
           </tr>
         </table>
 
     </div>
+
+    <!-- if invalid url scanned -->
+    <div class="container-fluid" style="width: 80%; margin: auto; text-align: center;" th:if="${error}">
+      <p th:text="${error}"></p>
+    <div>
+      
 </body>
 </html>
