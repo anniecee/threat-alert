@@ -31,7 +31,7 @@ public class WebsiteController {
 
     @GetMapping("/home")
     public String home() {
-        return "urlscan";
+        return "scan/urlscan";
     }
     
 }
