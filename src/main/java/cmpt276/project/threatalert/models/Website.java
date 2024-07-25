@@ -13,7 +13,14 @@ public class Website {
     private String threatlevel;
     private Date date;
 
+    private int malicious;
+    private int suspicious;
+    private int undetected;
+    private int harmless;
+    private int timeout;
+
     @ManyToOne
+    @JoinColumn(name = "user_id")
     private User user;
 
     public Website() { 
@@ -23,6 +30,16 @@ public class Website {
         this.link = link;
         this.threatlevel = threatlevel;
         this.date = new Date();    
+    }
+
+    public Website(String link, int malicious, int suspicious, int undetected, int harmless, int timeout) {
+        this.link = link;
+        this.malicious = malicious;
+        this.suspicious = suspicious;
+        this.undetected = undetected;
+        this.harmless = harmless;
+        this.timeout = timeout;
+        this.date = new Date();
     }
 
     public int getWid() {
@@ -65,6 +82,47 @@ public class Website {
         this.user = user;
     }
 
+    public int getMalicious() {
+        return malicious;
+    }
+
+    public void setMalicious(int malicious) {
+        this.malicious = malicious;
+    }
+
+    public int getSuspicious() {
+        return suspicious;
+    }
+
+    public void setSuspicious(int suspicious) {
+        this.suspicious = suspicious;
+    }
+
+    public int getUndetected() {
+        return undetected;
+    }
+
+    public void setUndetected(int undetected) {
+        this.undetected = undetected;
+    }
+
+    public int getHarmless() {
+        return harmless;
+    }
+
+    public void setHarmless(int harmless) {
+        this.harmless = harmless;
+    }
+
+    public int getTimeout() {
+        return timeout;
+    }
+
+    public void setTimeout(int timeout) {
+        this.timeout = timeout;
+    }
+
+    
     
     
 }
