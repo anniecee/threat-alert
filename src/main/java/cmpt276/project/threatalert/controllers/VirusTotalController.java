@@ -43,20 +43,30 @@ public class VirusTotalController {
         logger.info("Received URL for scanning: {}", url);
         try {
             String result = virusTotalService.scanUrl(url);
-            model.addAttribute("result", result);
+            
+            // Verify the scan result
+            JsonObject jsonObject = JsonParser.parseString(result).getAsJsonObject();
+            if (jsonObject.has("error")) {
+                model.addAttribute("error", "Error reading URL. Please make sure to enter a valid URL.");
+                return "scan/urlscan";
+            }
+
+            model.addAttribute("result", true);
 
             // creating Website object and saving to User
             Website website = createWebsite(url, result);
-
             User user = (User) session.getAttribute("session_user");
             if (user == null) {
                 return "redirect:/user/login";
             }
+
             saveWebsiteToUser(user, website);
             website.setUser(user);
 
             websiteRepo.save(website);
             userRepo.save(user);
+
+            model.addAttribute("website", website);
 
             // Display scan result
             displayResult(result, model);
@@ -72,20 +82,6 @@ public class VirusTotalController {
     private void displayResult(String scanResultString, Model model) {
         // Create JsonObject from scan result string
         JsonObject result = JsonParser.parseString(scanResultString).getAsJsonObject();
-
-        // Get overview scan report
-        JsonObject stats = result.getAsJsonObject("data").getAsJsonObject("attributes").getAsJsonObject("stats");
-        Integer malicious = stats.get("malicious").getAsInt();
-        Integer suspicious = stats.get("suspicious").getAsInt();
-        Integer undetected = stats.get("undetected").getAsInt();
-        Integer harmless = stats.get("harmless").getAsInt();
-        Integer timeout = stats.get("timeout").getAsInt();
-
-        model.addAttribute("malicious", malicious);
-        model.addAttribute("suspicious", suspicious);
-        model.addAttribute("undetected", undetected);
-        model.addAttribute("harmless", harmless);
-        model.addAttribute("timeout", timeout);
         
         // Get security vendors' analysis
         JsonObject vendorObject = result.getAsJsonObject("data").getAsJsonObject("attributes").getAsJsonObject("results");
@@ -110,23 +106,23 @@ public class VirusTotalController {
         model.addAttribute("vendorResults", vendorResults);
     }
 
-        private Website createWebsite(String url, String result) {
-            //result is the json string
-            JsonObject jsonObject = JsonParser.parseString(result).getAsJsonObject();
-            jsonObject = jsonObject.getAsJsonObject("data").getAsJsonObject("attributes").getAsJsonObject("stats");
-            int malicious = jsonObject.get("malicious").getAsInt();
-            int suspicious = jsonObject.get("suspicious").getAsInt();
-            int undetected = jsonObject.get("undetected").getAsInt();
-            int harmless = jsonObject.get("harmless").getAsInt();
-            int timeout = jsonObject.get("timeout").getAsInt();
-            Website website = new Website(url, malicious, suspicious, undetected, harmless, timeout);
-            
-            return website;
-        }
+    private Website createWebsite(String url, String result) {
+        //result is the json string
+        JsonObject jsonObject = JsonParser.parseString(result).getAsJsonObject();
+        jsonObject = jsonObject.getAsJsonObject("data").getAsJsonObject("attributes").getAsJsonObject("stats");
+        int malicious = jsonObject.get("malicious").getAsInt();
+        int suspicious = jsonObject.get("suspicious").getAsInt();
+        int undetected = jsonObject.get("undetected").getAsInt();
+        int harmless = jsonObject.get("harmless").getAsInt();
+        int timeout = jsonObject.get("timeout").getAsInt();
+        Website website = new Website(url, malicious, suspicious, undetected, harmless, timeout);
+        
+        return website;
+    }
 
-        private void saveWebsiteToUser(User user, Website website) {
-            user = userRepo.findByUid(user.getUid()).get(0);
-            user.addHistory(website);
-        }
+    private void saveWebsiteToUser(User user, Website website) {
+        user = userRepo.findByUid(user.getUid()).get(0);
+        user.addHistory(website);
+    }
 
 }

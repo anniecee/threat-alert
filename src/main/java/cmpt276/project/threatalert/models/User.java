@@ -24,6 +24,9 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Website> history;
 
+    @OneToMany(mappedBy = "user")
+    private List<Website> bookmarks;
+
     public User() {}
 
     //constructor for regular user
@@ -33,6 +36,7 @@ public class User {
         this.password = password;
         this.type = "regular";
         this.history = new ArrayList<>();
+        this.bookmarks = new ArrayList<>();
     }
 
     //constructor for non-regular user (only admin for now)
@@ -43,6 +47,7 @@ public class User {
         this.password = password;
         this.type = type;
         this.history = new ArrayList<>();
+        this.bookmarks = new ArrayList<>();
     }
 
     public int getUid() {
@@ -107,5 +112,6 @@ public class User {
         }
         history.add(website);
     }
+    
 
 }
