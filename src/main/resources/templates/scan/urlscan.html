@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Scanner</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <!-- logo -->
+        <a class="navbar-brand mx-4 py-3" href="/landing">
+            <img src="img/ThreatAlertLogo.jpg" width="70" class="d-inline-block align-top" alt=""><font size="6"><b>ThreatAlert</b></font>
+        </a>
+        <div class="container-fluid">
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse navbar justify-content-end" id="navbarNavAltMarkup">
+              <div class="navbar-nav">
+                  <div class="redirects">
+                      <a class="btn btn-header" href="/home">Home<span class="sr-only"></span></a>
+                      <a class="btn btn-header" href="/user/history">History<span class="sr-only"></span></a>
+                      <a class="btn btn-header" href="/user/profile">Profile<span class="sr-only"></span></a>
+                    </div>
+                <!-- <a class="nav-item nav-link mx-4" href="#">Bookmark</a>
+                <a class="nav-item nav-link mx-4" href="#">History</a> -->
+                <a class="btn btn-dark" href="/user/logout" style="margin-right: 20px;">Log Out</a>
+
+              </div>
+          </div>
+          </div>
+    </nav>
+
+    <br><br><br>
+    <!-- URL scanner and button -->
+    <div style="text-align: center;">
+      <form class="form-inline d-flex justify-content-center" action="#" th:action="@{/scan}" method="post" style="width: 50%; margin:auto">
+        <label for="url"></label>
+        <input class="form-control mx-2" id="url" type="link" name="url" required placeholder="Enter URL here to scan for threats" aria-label="Link" style="width: 75%; border: 2px solid; ">
+        <button class="btn btn-primary ml-2" type="submit" style="border: 2px solid;">Scan</button> 
+      </form>
+    </div>
+
+    <!-- Result -->
+    <br><br><br>
+    <div class="container-fluid" style="width: 80%; margin: auto;" th:if="${result}">
+        <span th:if="${malicious + suspicious > 5}" style="color: orange;"><h3> Threat Level: Warning! </h3></span>
+        <span th:unless="${malicious + suspicious > 5}" style="color: green;"><h3> Threat Level: Clean! </h3></span>
+        
+        <br><br>
+        <div>
+        <h4>Scan Report:</h4>
+          <b style="color: red;">Malicious: </b><span th:text="${malicious}"></span><br>
+          <b style="color: red;">Suspicious: </b><span th:text="${suspicious}"></span><br>
+          <b style="color: green;">Harmless: </b><span th:text="${harmless}"></span><br>
+          <b style="color: grey;">Undetected: </b><span th:text="${undetected}"></span><br>
+          <b style="color: grey;">Timeout: </b><span th:text="${timeout}"></span><br>
+        </div>
+        
+        <br><br>
+        <h4>Security Vendors' Analysis:</h4>
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Engine name</th>
+              <th scope="col">Category</th>
+              <th scope="col">Result</th>
+            </tr>
+          </thead>
+          <tr th:each="vendor : ${vendorResults}">
+            <b><td th:text ="${vendor.get('engine_name')}" ></td></b>
+            <td th:text ="${vendor.get('category')}" ></td>
+            <td th:text ="${vendor.get('result')}" ></td>           
+          </tr>
+        </table>
+
+    </div>
+</body>
+</html>
