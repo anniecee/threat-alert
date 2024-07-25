@@ -49,9 +49,36 @@
     <!-- Result -->
     <br><br><br>
     <div class="container-fluid" style="width: 80%; margin: auto;" th:if="${result}">
-        <!-- <span th:if="${result.data.attributes.states.malicious + result.data.attributes.states.suspicious > 5}" style="color: red;">Warning</span>
-        <span th:unless="${result.data.attributes.states.malicious + result.data.attributes.states.suspicious > 5}" style="color: green;">Clean</span> -->
-        <pre th:text="${result}"></pre>
+        <span th:if="${malicious + suspicious > 5}" style="color: orange;"><h3> Threat Level: Warning! </h3></span>
+        <span th:unless="${malicious + suspicious > 5}" style="color: green;"><h3> Threat Level: Clean! </h3></span>
+        
+        <br><br>
+        <div>
+        <h4>Scan Report:</h4>
+          <b style="color: red;">Malicious: </b><span th:text="${malicious}"></span><br>
+          <b style="color: red;">Suspicious: </b><span th:text="${suspicious}"></span><br>
+          <b style="color: green;">Harmless: </b><span th:text="${harmless}"></span><br>
+          <b style="color: grey;">Undetected: </b><span th:text="${undetected}"></span><br>
+          <b style="color: grey;">Timeout: </b><span th:text="${timeout}"></span><br>
+        </div>
+        
+        <br><br>
+        <h4>Security Vendors' Analysis:</h4>
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Engine name</th>
+              <th scope="col">Category</th>
+              <th scope="col">Result</th>
+            </tr>
+          </thead>
+          <tr th:each="vendor : ${vendorResults}">
+            <b><td th:text ="${vendor.get('engine_name')}" ></td></b>
+            <td th:text ="${vendor.get('category')}" ></td>
+            <td th:text ="${vendor.get('result')}" ></td>           
+          </tr>
+        </table>
+
     </div>
 </body>
 </html>
