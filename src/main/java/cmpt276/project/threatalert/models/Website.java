@@ -39,6 +39,12 @@ public class Website {
         this.undetected = undetected;
         this.harmless = harmless;
         this.timeout = timeout;
+        if (malicious + suspicious > 5) {
+            this.threatlevel = "Warning!";
+        }
+        else {
+            this.threatlevel = "Clean!";
+        }
         this.date = new Date();
     }
 
