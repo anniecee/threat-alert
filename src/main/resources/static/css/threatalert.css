@@ -188,7 +188,7 @@ th.link {
     min-width: 300px;
 }
 
-th.threat {
+th.threat-level, th.threat-details {
     min-width: 150px;
 }
 
