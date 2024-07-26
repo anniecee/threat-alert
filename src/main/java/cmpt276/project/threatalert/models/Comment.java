@@ -27,6 +27,14 @@ public class Comment {
         this.user = user;
     }
 
+
+    public Comment(User user, String content, Date date, Website website) {
+        this.content = content;
+        this.date = date;
+        this.user = user;
+        this.website = website;
+    }
+
     public int getCid() {
         return cid;
     }

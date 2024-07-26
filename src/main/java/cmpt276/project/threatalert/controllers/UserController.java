@@ -192,7 +192,7 @@ public class UserController {
 
         User user = (User) session.getAttribute("session_user");
         if (user == null) {
-            response.setStatus(400);
+            response.setStatus(400); 
             return;
         }
 
