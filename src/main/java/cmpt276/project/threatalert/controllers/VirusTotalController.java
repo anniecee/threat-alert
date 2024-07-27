@@ -20,6 +20,7 @@ import cmpt276.project.threatalert.models.UserRepository;
 import cmpt276.project.threatalert.models.Website;
 import cmpt276.project.threatalert.models.WebsiteRepository;
 import cmpt276.project.threatalert.services.VirusTotalService;
+import cmpt276.project.threatalert.services.OpenAIService;
 import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
@@ -34,9 +35,13 @@ public class VirusTotalController {
     private VirusTotalService virusTotalService;
 
     @Autowired
+    private OpenAIService openAIService;
+
+    @Autowired
     private WebsiteRepository websiteRepo;
 
-    @Autowired UserRepository userRepo;
+    @Autowired
+    private UserRepository userRepo;
 
     @PostMapping("/scan")
     public String scanUrl(@RequestParam("url") String url, Model model, HttpSession session) {
@@ -104,6 +109,15 @@ public class VirusTotalController {
             vendorResults.add(entryMap);
         }
         model.addAttribute("vendorResults", vendorResults);
+
+        try {
+            // Get the summary from OpenAIService
+            String summary = openAIService.summarize(scanResultString);
+            model.addAttribute("summary", summary);
+        } catch (IOException | InterruptedException e) {
+            logger.error("Error summarizing scan result: {}", e.getMessage(), e);
+            model.addAttribute("summary", "Error summarizing scan result.");
+        }
     }
 
     private Website createWebsite(String url, String result) {
