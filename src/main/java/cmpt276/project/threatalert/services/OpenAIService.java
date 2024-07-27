@@ -16,7 +16,8 @@ import java.util.logging.Logger;
 @Service
 public class OpenAIService {
 
-    private String openaiApiKey = "sk-proj-k4b3UQPUD8BF7KW7irsOT3BlbkFJ5FSrxToIchPN0PSfkZ8H";
+    @Value("${openai.api.key}")
+    private String openaiApiKey;
 
     private static final Logger logger = Logger.getLogger(OpenAIService.class.getName());
 
