@@ -3,6 +3,8 @@ package cmpt276.project.threatalert.models;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.Date;
+
 public class UserTest {
 
     @Test
@@ -18,9 +20,11 @@ public class UserTest {
     @Test
     public void testConstructorForRegularUser() {
         // Tests the constructor for a regular user
+        String name = "test";
         String email = "test@example.com";
         String password = "password123";
-        User user = new User(email, password);
+        Date date = new Date();
+        User user = new User(name, date, email, password);
         
         assertEquals(email, user.getEmail());
         assertEquals(password, user.getPassword());
