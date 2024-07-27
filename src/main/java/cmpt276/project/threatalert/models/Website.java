@@ -9,9 +9,11 @@ public class Website {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int wid;
-    private String link;
     private String threatlevel;
     private Date date;
+
+    @Column(unique=true)
+    private String link;
 
     private int malicious;
     private int suspicious;
@@ -22,6 +24,9 @@ public class Website {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    @OneToMany(mappedBy = "website")
+    private List<Comment> comments;
 
     public Website() { 
     }
@@ -46,7 +51,20 @@ public class Website {
             this.threatlevel = "Clean!";
         }
         this.date = new Date();
+        this.comments = new ArrayList<>();
     }
+    
+
+    // public Website(String link, int malicious, int suspicious, int undetected, int harmless, int timeout,
+    //         List<Comment> comments) {
+    //     this.link = link;
+    //     this.malicious = malicious;
+    //     this.suspicious = suspicious;
+    //     this.undetected = undetected;
+    //     this.harmless = harmless;
+    //     this.timeout = timeout;
+    //     this.comments = comments;
+    // }
 
     public int getWid() {
         return wid;
@@ -128,7 +146,19 @@ public class Website {
         this.timeout = timeout;
     }
 
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
     
-    
+    public void addComment(Comment comment) {
+        if (comments == null) {
+            comments = new ArrayList<>();
+        }
+        comments.add(comment);
+    }
     
 }
