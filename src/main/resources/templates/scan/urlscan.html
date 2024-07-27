@@ -84,6 +84,21 @@
             <td style="text-transform: capitalize;" th:text ="${vendor.get('result')}" ></td>           
           </tr>
         </table>
+      
+
+        <div id="commentBar">
+          <form id="commentDiv" action="#" th:action="@{/addComment}" method="post" style="display: flex; justify-content: center; align-items: center; flex-direction: column; ">
+              <textarea id="commentInput" placeholder="Enter your comment here..." style="width: 100%;"></textarea>
+              <button id="commentButton" href>Enter</button>
+          </form>
+      </div>
+      
+        <br><br>
+        
+        <p id="comments">
+          when scan, turns into table of comments
+        </p>
+        <p id="newcomment"></p>
 
     </div>
 
@@ -91,6 +106,9 @@
     <div class="container-fluid" style="width: 80%; margin: auto; text-align: center;" th:if="${error}">
       <p th:text="${error}"></p>
     <div>
+
+
+
       
 </body>
 </html>
