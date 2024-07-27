@@ -29,8 +29,9 @@ public class User {
 
     public User() {}
 
-    public User(String email, String password) {
-        this.date = new Date();
+    public User(String name, Date date, String email, String password) {
+        this.name = name;
+        this.date = date;
         this.email = email;
         this.password = password;
         this.type = "regular";
