@@ -22,8 +22,6 @@ import cmpt276.project.threatalert.models.Scan;
 import cmpt276.project.threatalert.models.ScanRepository;
 import cmpt276.project.threatalert.models.User;
 import cmpt276.project.threatalert.models.UserRepository;
-import cmpt276.project.threatalert.models.Website;
-import cmpt276.project.threatalert.models.WebsiteRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -35,9 +33,6 @@ public class UserController {
 
     @Autowired
     private UserRepository userRepo;
-
-    @Autowired 
-    private WebsiteRepository websiteRepo;
 
     @Autowired
     private ScanRepository scanRepo;
@@ -209,8 +204,6 @@ public class UserController {
     //     response.setStatus(200);
  
     // }
-
-    /*  */
 
     @PostMapping("/user/delete")
     public String deleteUser(@RequestParam("uid") int uid, HttpServletResponse response) {
