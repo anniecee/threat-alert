@@ -119,6 +119,7 @@ public class UserController {
     @PostMapping("/user/signup")
     public String signup(@RequestParam Map<String, String> formData, Model model, HttpServletRequest request, HttpSession session, HttpServletResponse response, RedirectAttributes redirectAttributes) {
 
+        String name = formData.get("name");
         String email = formData.get("email");
         String password = formData.get("password");
         String confirmedPassword = formData.get("passwordConfirm");
@@ -142,8 +143,8 @@ public class UserController {
         //if not in there
         if (userList.isEmpty()) { //add to database and redirect to home page
             
-            User user = new User(email, confirmedPassword);
-            userRepo.save(user);
+            Date date = new Date();
+            User user = new User(name, date, email, confirmedPassword);            userRepo.save(user);
             request.getSession().setAttribute("session_user", user);
             response.setStatus(HttpServletResponse.SC_CREATED);
 
