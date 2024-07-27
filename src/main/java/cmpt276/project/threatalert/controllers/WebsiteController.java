@@ -29,9 +29,10 @@ public class WebsiteController {
 
     }
 
-    @GetMapping("/home")
+    @GetMapping({"/home", "/scan"})
     public String home() {
         return "scan/urlscan";
     }
+
     
 }
