@@ -4,14 +4,14 @@ import jakarta.persistence.*;
 import java.util.*;
 
 @Entity
-@Table(name="websites")
+@Table(name="websites2")
 public class Website {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int wid;
+
     private String link;
     private String threatlevel;
-    private Date date;
 
     private int malicious;
     private int suspicious;
@@ -19,17 +19,14 @@ public class Website {
     private int harmless;
     private int timeout;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @OneToMany(mappedBy = "website", cascade = CascadeType.ALL)
+    private List<Scan> scans;
 
-    public Website() { 
-    }
+    public Website() {}
 
     public Website(String link, String threatlevel) {
         this.link = link;
         this.threatlevel = threatlevel;
-        this.date = new Date();    
     }
 
     public Website(String link, int malicious, int suspicious, int undetected, int harmless, int timeout) {
@@ -39,13 +36,9 @@ public class Website {
         this.undetected = undetected;
         this.harmless = harmless;
         this.timeout = timeout;
-        if (malicious + suspicious > 5) {
-            this.threatlevel = "Warning!";
-        }
-        else {
-            this.threatlevel = "Clean!";
-        }
-        this.date = new Date();
+        this.threatlevel = (malicious + suspicious > 5) ? "Warning!" : "Clean!";
+        this.scans = new ArrayList<>();
+
     }
 
     public int getWid() {
@@ -70,22 +63,6 @@ public class Website {
 
     public void setThreatlevel(String threatlevel) {
         this.threatlevel = threatlevel;
-    }
-
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 
     public int getMalicious() {
@@ -128,7 +105,22 @@ public class Website {
         this.timeout = timeout;
     }
 
-    
-    
-    
+    public List<Scan> getScans() {
+        return scans;
+    }
+
+    public void setScans(List<Scan> scans) {
+        this.scans = scans;
+    }
+
+    public void addScan(Scan scan) {
+        if (scans == null) {
+            scans = new ArrayList<>();
+        }
+        scans.add(scan);
+    }
+
+    public void removeScan(Scan scan) {
+        scans.remove(scan);
+    }
 }

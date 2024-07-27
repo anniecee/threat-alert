@@ -1,7 +1,9 @@
 package cmpt276.project.threatalert.models;
 
-import java.util.*; 
+import java.util.*;
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -15,39 +17,33 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int uid;
+
     private String name;
     private Date date;
     private String email;
     private String password;
-    private String type; //"regular" for regular user, "admin" for admin user
+    private String type; // "regular" for regular user, "admin" for admin user
 
-    @OneToMany(mappedBy = "user")
-    private List<Website> history;
-
-    @OneToMany(mappedBy = "user")
-    private List<Website> bookmarks;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Scan> scans;
 
     public User() {}
 
-    //constructor for regular user
     public User(String email, String password) {
         this.date = new Date();
         this.email = email;
         this.password = password;
         this.type = "regular";
-        this.history = new ArrayList<>();
-        this.bookmarks = new ArrayList<>();
+        this.scans = new ArrayList<>();
     }
 
-    //constructor for non-regular user (only admin for now)
     public User(String email, String password, String type) {
         this.name = "Admin";
         this.date = new Date();
         this.email = email;
         this.password = password;
         this.type = type;
-        this.history = new ArrayList<>();
-        this.bookmarks = new ArrayList<>();
+        this.scans = new ArrayList<>();
     }
 
     public int getUid() {
@@ -82,14 +78,6 @@ public class User {
         this.type = type;
     }
 
-    public List<Website> getHistory() {
-        return history;
-    }
-
-    public void setHistory(List<Website> history) {
-        this.history = history;
-    }
-
     public String getName() {
         return name;
     }
@@ -106,12 +94,23 @@ public class User {
         this.date = date;
     }
 
-    public void addHistory(Website website) {
-        if (history == null) {
-            history = new ArrayList<>();
-        }
-        history.add(website);
+    public List<Scan> getScans() {
+        return scans;
     }
-    
+
+    public void setScans(List<Scan> scans) {
+        this.scans = scans;
+    }
+
+    public void addScan(Scan scan) {
+        if (scans == null) {
+            scans = new ArrayList<>();
+        }
+        scans.add(scan);
+    }
+
+    public void removeScan(Scan scan) {
+        scans.remove(scan);
+    }
 
 }
