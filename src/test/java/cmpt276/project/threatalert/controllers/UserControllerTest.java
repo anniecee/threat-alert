@@ -64,7 +64,8 @@ public class UserControllerTest {
     @Test
     public void testGetLoginRegularUserLoggedIn() throws Exception {
         // Tests the GET /user/login endpoint when a regular user is logged in
-        User regularUser = new User("user@example.com", "password");
+        Date date = new Date();
+        User regularUser = new User("user", date, "user@example.com", "password");
         when(session.getAttribute("session_user")).thenReturn(regularUser);
 
         mockMvc.perform(get("/user/login").sessionAttr("session_user", regularUser))
@@ -103,7 +104,8 @@ public class UserControllerTest {
     @Test
     public void testLoginValidRegularUserCredentials() throws Exception {
         // Tests the POST /user/login endpoint with valid regular user credentials
-        User regularUser = new User("user@example.com", "password");
+        Date date = new Date();
+        User regularUser = new User("user", date, "user@example.com", "password");
         List<User> userList = new ArrayList<>();
         userList.add(regularUser);
         when(userRepository.findByEmailAndPassword("user@example.com", "password")).thenReturn(userList);
@@ -146,7 +148,8 @@ public class UserControllerTest {
     @Test
     public void testSignupEmailAlreadyExists() throws Exception {
         // Tests the POST /user/signup endpoint when the email already exists
-        User existingUser = new User("user@example.com", "password");
+        Date date = new Date();
+        User existingUser = new User("user", date, "user@example.com", "password");
         List<User> userList = new ArrayList<>();
         userList.add(existingUser);
         when(userRepository.findByEmail("user@example.com")).thenReturn(userList);
@@ -179,8 +182,9 @@ public class UserControllerTest {
         // Tests the GET /admin/userview endpoint for an admin user
         User adminUser = new User("admin@example.com", "password", "admin");
         List<User> userList = new ArrayList<>();
-        userList.add(new User("user1@example.com", "password"));
-        userList.add(new User("user2@example.com", "password"));
+        Date date = new Date();
+        userList.add(new User("user", date, "user1@example.com", "password"));
+        userList.add(new User("user", date, "user2@example.com", "password"));
         when(session.getAttribute("session_user")).thenReturn(adminUser);
         when(userRepository.findAll()).thenReturn(userList);
 
@@ -193,7 +197,8 @@ public class UserControllerTest {
     @Test
     public void testShowUsersNotAdmin() throws Exception {
         // Tests the GET /admin/userview endpoint for a non-admin user
-        User regularUser = new User("user@example.com", "password");
+        Date date = new Date();
+        User regularUser = new User("user", date, "user@example.com", "password");
         when(session.getAttribute("session_user")).thenReturn(regularUser);
 
         mockMvc.perform(get("/admin/userview").sessionAttr("session_user", regularUser))
@@ -213,7 +218,8 @@ public class UserControllerTest {
     @Test
     public void testAddHistory() throws Exception {
         // Tests the POST /user/addhistory endpoint
-        User user = new User("user@example.com", "password");
+        Date date = new Date();
+        User user = new User("user", date, "user@example.com", "password");
         user.setUid(1);
         Website website = new Website();
         website.setWid(1);
@@ -238,8 +244,8 @@ public class UserControllerTest {
     @Test
     public void testViewHistory() throws Exception {
         // Tests the GET /user/history endpoint
-        User user = new User("user@example.com", "password");
-        user.setUid(1);
+        Date date = new Date();
+        User user = new User("user", date, "user@example.com", "password");        user.setUid(1);
         List<Website> history = new ArrayList<>();
         history.add(new Website("http://example.com", "Clean"));
         user.setHistory(history);
@@ -260,8 +266,8 @@ public class UserControllerTest {
         website.setWid(1);
         website.setLink("http://example.com");
         website.setThreatlevel("Clean");
-        User user = new User("user@example.com", "password");
-        user.setUid(1);
+        Date date = new Date();
+        User user = new User("user", date, "user@example.com", "password");        user.setUid(1);
         website.setUser(user);
 
         when(websiteRepository.findByWid(1)).thenReturn(website);
