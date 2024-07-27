@@ -222,3 +222,8 @@ td.threat-type {
     padding: 0;
     text-decoration: underline;
 }
+
+.navbar-header {
+    position: static;
+    z-index: 999;
+}
