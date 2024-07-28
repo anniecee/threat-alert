@@ -24,7 +24,6 @@ public class User {
     private String password;
     private String type; // "regular" for regular user, "admin" for admin user
 
-<<<<<<< HEAD
     @OneToMany(mappedBy = "user")
     private List<Website> history;
 
@@ -33,10 +32,8 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<Website> bookmarks;
-=======
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Scan> scans;
->>>>>>> f69b8cdab3f22e46ebec6bc79caae1ec2295f9d4
 
     public User() {}
 

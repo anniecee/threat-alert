@@ -42,7 +42,7 @@
 //     private CommentRepository commentRepo;
 
 //     @PostMapping("/addComment")
-//     public ResponseEntity<?> addComment(@RequestBody Map<String, String> formData, HttpSession session, HttpServletResponse response) {
+//     public ResponseEntity<?> addComment(@RequestBody Map<String, String> formData, Model model, HttpSession session, HttpServletResponse response) {
 
 //         System.out.println("formData: " + formData);
 //         Date newDate = new Date();
@@ -50,26 +50,29 @@
 //         User user = (User) session.getAttribute("session_user");
 
 //         // Get current website
-//         String link = formData.get("url"); 
+//         // String link = formData.get("url"); 
+//         String link = (String) session.getAttribute("scanned_url");
 
 //         //check if link is already in repository
 //         List<Website> websiteList = websiteRepo.findByLink(link);
 
 //         // if no, create the website object with an empty list of comments
-//         Website website;
-//         if (websiteList.isEmpty()) {
-//             List<Comment> newcomments = new ArrayList<>();
-//             website = new Website(newDate, link, newcomments);
-//             websiteRepo.save(website);
-//         }
-//         else{
-//             website = websiteList.get(0);
-//         }
+//         // Website website;
+//         // if (websiteList.isEmpty()) {
+//         //     List<Comment> newcomments = new ArrayList<>();
+//         //     website = new Website(newDate, link, newcomments);
+//         //     websiteRepo.save(website);
+//         // }
+//         // else{
+//         //     website = websiteList.get(0);
+//         // }
+
+//         Website website = websiteList.get(0);
 
 //         // Get comment content
 //         String content = formData.get("commentInput");
 //         if (content.length() == 0){
-//             //model.addAttribute("error", "No Comment Input");
+//             model.addAttribute("error", "No Comment Input");
 //             response.setStatus(400);
 //         }
 
