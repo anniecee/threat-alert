@@ -104,7 +104,7 @@ public class VirusTotalController {
             userRepo.save(user);
             logger.info("saved to user repo");
 
-
+            session.setAttribute("scanned_url", url);
 
             model.addAttribute("website", website);
 
