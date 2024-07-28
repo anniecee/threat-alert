@@ -1,5 +1,7 @@
 package cmpt276.project.threatalert.controllers;
 
+import cmpt276.project.threatalert.models.Scan;
+import cmpt276.project.threatalert.models.ScanRepository;
 import cmpt276.project.threatalert.models.User;
 import cmpt276.project.threatalert.models.UserRepository;
 import cmpt276.project.threatalert.models.Website;
@@ -34,6 +36,9 @@ public class UserControllerTest {
     @MockBean
     private WebsiteRepository websiteRepository;
 
+    @MockBean
+    private ScanRepository scanRepository;
+
     @Mock
     private HttpSession session;
 
@@ -63,14 +68,13 @@ public class UserControllerTest {
 
     @Test
     public void testGetLoginRegularUserLoggedIn() throws Exception {
-        // Tests the GET /user/login endpoint when a regular user is logged in
         Date date = new Date();
         User regularUser = new User("user", date, "user@example.com", "password");
         when(session.getAttribute("session_user")).thenReturn(regularUser);
 
         mockMvc.perform(get("/user/login").sessionAttr("session_user", regularUser))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/scan.html"));
+                .andExpect(redirectedUrl("/home"));
     }
 
     @Test
@@ -114,7 +118,7 @@ public class UserControllerTest {
                 .param("email", "user@example.com")
                 .param("password", "password"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/scan.html"));
+                .andExpect(redirectedUrl("/home"));
     }
 
     @Test
@@ -167,7 +171,7 @@ public class UserControllerTest {
     public void testSignupSuccess() throws Exception {
         // Tests the POST /user/signup endpoint with a successful signup
         when(userRepository.findByEmail("user@example.com")).thenReturn(new ArrayList<>());
-    
+
         mockMvc.perform(post("/user/signup")
                 .param("email", "user@example.com")
                 .param("password", "password!@#")
@@ -175,7 +179,6 @@ public class UserControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/user/login"));
     }
-    
 
     @Test
     public void testShowUsersAdmin() throws Exception {
@@ -217,65 +220,143 @@ public class UserControllerTest {
 
     // @Test
     // public void testAddHistory() throws Exception {
-    //     // Tests the POST /user/addhistory endpoint
-    //     Date date = new Date();
-    //     User user = new User("user", date, "user@example.com", "password");
-    //     user.setUid(1);
-    //     Website website = new Website();
-    //     website.setWid(1);
-    //     website.setLink("http://example.com");
-    //     website.setThreatlevel("Clean");
-    //     website.setDate(new Date());
+    // // Tests the POST /user/addhistory endpoint
+    // Date date = new Date();
+    // User user = new User("user", date, "user@example.com", "password");
+    // user.setUid(1);
+    // Website website = new Website();
+    // website.setWid(1);
+    // website.setLink("http://example.com");
+    // website.setThreatlevel("Clean");
+    // website.setDate(new Date());
 
-    //     when(session.getAttribute("session_user")).thenReturn(user);
-    //     when(userRepository.findByUid(1)).thenReturn(List.of(user));
-    //     when(userRepository.save(user)).thenReturn(user);
+    // when(session.getAttribute("session_user")).thenReturn(user);
+    // when(userRepository.findByUid(1)).thenReturn(List.of(user));
+    // when(userRepository.save(user)).thenReturn(user);
 
-    //     mockMvc.perform(post("/user/addhistory")
-    //             .sessionAttr("session_user", user)
-    //             .contentType("application/json")
-    //             .content("{\"link\":\"http://example.com\", \"threatlevel\":\"Clean\"}"))
-    //             .andExpect(status().isOk());
+    // mockMvc.perform(post("/user/addhistory")
+    // .sessionAttr("session_user", user)
+    // .contentType("application/json")
+    // .content("{\"link\":\"http://example.com\", \"threatlevel\":\"Clean\"}"))
+    // .andExpect(status().isOk());
     // }
 
-    
-    
+    @Test
+    public void testViewHistory() throws Exception {
+        Date date = new Date();
+        User user = new User("user", date, "user@example.com", "password");
+        user.setUid(1);
 
-    // @Test
-    // public void testViewHistory() throws Exception {
-    //     // Tests the GET /user/history endpoint
-    //     Date date = new Date();
-    //     User user = new User("user", date, "user@example.com", "password");        user.setUid(1);
-    //     List<Website> history = new ArrayList<>();
-    //     history.add(new Website("http://example.com", "Clean"));
-    //     user.setHistory(history);
+        Website website = new Website("http://example.com", "Clean");
+        Scan scan = new Scan(website);
+        List<Scan> scans = new ArrayList<>();
+        scans.add(scan);
+        user.setScans(scans);
 
-    //     when(session.getAttribute("session_user")).thenReturn(user);
-    //     when(userRepository.findByUid(1)).thenReturn(List.of(user));
+        when(session.getAttribute("session_user")).thenReturn(user);
+        when(userRepository.findByUid(1)).thenReturn(List.of(user));
 
-    //     mockMvc.perform(get("/user/history").sessionAttr("session_user", user))
-    //             .andExpect(status().isOk())
-    //             .andExpect(model().attributeExists("history"))
-    //             .andExpect(view().name("user/history"));
-    // }
+        mockMvc.perform(get("/user/history").sessionAttr("session_user", user))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("history"))
+                .andExpect(view().name("user/history"));
+    }
 
-    // @Test
-    // public void testDeleteWebsite() throws Exception {
-    //     // Tests the POST /user/deletewebsite endpoint
-    //     Website website = new Website();
-    //     website.setWid(1);
-    //     website.setLink("http://example.com");
-    //     website.setThreatlevel("Clean");
-    //     Date date = new Date();
-    //     User user = new User("user", date, "user@example.com", "password");        user.setUid(1);
-    //     website.setUser(user);
+    @Test
+    public void testDeleteWebsite() throws Exception {
+        int sid = 1;
+        Date date = new Date();
+        User user = new User("user", date, "user@example.com", "password");
+        user.setUid(1);
 
-    //     when(websiteRepository.findByWid(1)).thenReturn(website);
-    //     when(userRepository.save(user)).thenReturn(user);
+        Website website = new Website("http://example.com", "Clean");
+        Scan scan = new Scan(website);
+        scan.setSid(sid);
+        scan.setUser(user);
+        List<Scan> scans = new ArrayList<>();
+        scans.add(scan);
 
-    //     mockMvc.perform(post("/user/deletewebsite")
-    //             .param("wid", "1"))
-    //             .andExpect(status().is3xxRedirection())
-    //             .andExpect(redirectedUrl("/user/history"));
-    // }
+        when(scanRepository.findBySid(sid)).thenReturn(scans);
+
+        mockMvc.perform(delete("/user/deletefromhistory")
+                .contentType("application/json")
+                .content(String.valueOf(sid)))
+                .andExpect(status().isGone());
+
+        verify(scanRepository, times(1)).delete(scan);
+    }
+
+    @Test
+    public void testViewBookmarks() throws Exception {
+        Date date = new Date();
+        User user = new User("user", date, "user@example.com", "password");
+        user.setUid(1);
+
+
+        Website website = new Website("http://example.com", "Clean");
+        Scan scan = new Scan(website);
+        List<Scan> scans = new ArrayList<>();
+        scan.setBookmark(true);
+        scans.add(scan);
+        user.setScans(scans);
+
+        when(session.getAttribute("session_user")).thenReturn(user);
+        when(userRepository.findByUid(1)).thenReturn(List.of(user));
+
+        mockMvc.perform(get("/user/bookmarks").sessionAttr("session_user", user))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("bookmarks"))
+                .andExpect(view().name("user/bookmarks"));
+    }
+
+    @Test
+    public void testAddBookmark() throws Exception {
+        int sid = 1;
+        Scan scan = new Scan();
+        scan.setSid(sid);
+        List<Scan> scans = new ArrayList<>();
+        scans.add(scan);
+
+        when(scanRepository.findBySid(sid)).thenReturn(scans);
+
+        mockMvc.perform(put("/user/addbookmark")
+                .contentType("application/json")
+                .content(String.valueOf(sid)))
+                .andExpect(status().isOk());
+
+        verify(scanRepository, times(1)).save(scan);
+    }
+
+    @Test
+    public void testRemoveBookmark() throws Exception {
+        int sid = 1;
+        Scan scan = new Scan();
+        scan.setSid(sid);
+        List<Scan> scans = new ArrayList<>();
+        scans.add(scan);
+
+        when(scanRepository.findBySid(sid)).thenReturn(scans);
+
+        mockMvc.perform(delete("/user/removebookmark")
+                .contentType("application/json")
+                .content(String.valueOf(sid)))
+                .andExpect(status().isAccepted());
+
+        verify(scanRepository, times(1)).save(scan);
+    }
+
+    @Test
+    public void testViewProfile() throws Exception {
+        Date date = new Date();
+        User user = new User("user", date, "user@example.com", "password");
+        user.setUid(1);
+
+        when(session.getAttribute("session_user")).thenReturn(user);
+        when(userRepository.findByUid(1)).thenReturn(List.of(user));
+
+        mockMvc.perform(get("/user/profile").sessionAttr("session_user", user))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("user"))
+                .andExpect(view().name("user/profile"));
+    }
 }

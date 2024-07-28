@@ -51,7 +51,7 @@ public class OpenAIService {
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
         // Log the raw response
-        logger.info("OpenAI API response body: " + response.body());
+        logger.info("OpenAI API response body: \n" + response.body());
 
         JsonObject jsonResponse = JsonParser.parseString(response.body()).getAsJsonObject();
 
