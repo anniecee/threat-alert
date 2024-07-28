@@ -100,7 +100,7 @@ public class WebsiteTest {
         website.setSuspicious(suspicious);
         assertEquals(suspicious, website.getSuspicious());
     }
-
+    
     @Test
     public void testSetAndGetUndetected() {
         Website website = new Website();
