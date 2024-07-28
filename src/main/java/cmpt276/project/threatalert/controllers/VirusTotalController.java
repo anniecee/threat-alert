@@ -21,6 +21,7 @@ import cmpt276.project.threatalert.models.UserRepository;
 import cmpt276.project.threatalert.models.Website;
 import cmpt276.project.threatalert.models.WebsiteRepository;
 import cmpt276.project.threatalert.services.VirusTotalService;
+import cmpt276.project.threatalert.services.OpenAIService;
 import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
@@ -32,6 +33,9 @@ public class VirusTotalController {
 
     @Autowired
     private VirusTotalService virusTotalService;
+
+    @Autowired
+    private OpenAIService openAIService;
 
     @Autowired
     private WebsiteRepository websiteRepo;
@@ -158,6 +162,15 @@ public class VirusTotalController {
             vendorResults.add(entryMap);
         }
         model.addAttribute("vendorResults", vendorResults);
+
+        // Generate the summary from OpenAIService
+        try {
+            String summary = openAIService.summarize(scanResultString);
+            model.addAttribute("summary", summary);
+        } catch (IOException | InterruptedException e) {
+            logger.error("Error summarizing scan result: {}", e.getMessage(), e);
+            model.addAttribute("summary", "Error summarizing scan result.");
+        }
     }
 
 }
