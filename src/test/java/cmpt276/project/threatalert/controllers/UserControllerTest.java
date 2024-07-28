@@ -69,6 +69,7 @@ public class UserControllerTest {
     @Test
     public void testGetLoginRegularUserLoggedIn() throws Exception {
         Date date = new Date();
+        // Test the GET /user/login endpoint when a regular user is logged in
         User regularUser = new User("user", date, "user@example.com", "password");
         when(session.getAttribute("session_user")).thenReturn(regularUser);
 
@@ -243,6 +244,8 @@ public class UserControllerTest {
 
     @Test
     public void testViewHistory() throws Exception {
+        // Test to verify the behavior of viewing user history.
+        // Sets up a user with a scan history and verifies that the history is correctly added to the model and the view is "user/history".
         Date date = new Date();
         User user = new User("user", date, "user@example.com", "password");
         user.setUid(1);
@@ -264,6 +267,8 @@ public class UserControllerTest {
 
     @Test
     public void testDeleteWebsite() throws Exception {
+        // Test to verify the behavior of deleting a scan from user history.
+        // Sets up a scan with a given sid and verifies that the scan is correctly deleted from the repository and the status is 410 Gone.
         int sid = 1;
         Date date = new Date();
         User user = new User("user", date, "user@example.com", "password");
@@ -288,10 +293,11 @@ public class UserControllerTest {
 
     @Test
     public void testViewBookmarks() throws Exception {
+        // Test to verify the behavior of viewing user bookmarks.
+        // Sets up a user with bookmarked scans and verifies that the bookmarks are correctly added to the model and the view is "user/bookmarks".
         Date date = new Date();
         User user = new User("user", date, "user@example.com", "password");
         user.setUid(1);
-
 
         Website website = new Website("http://example.com", "Clean");
         Scan scan = new Scan(website);
@@ -311,6 +317,8 @@ public class UserControllerTest {
 
     @Test
     public void testAddBookmark() throws Exception {
+        // Test to verify the behavior of adding a bookmark to a scan.
+        // Sets up a scan with a given sid and verifies that the scan is correctly saved in the repository with a bookmark status.
         int sid = 1;
         Scan scan = new Scan();
         scan.setSid(sid);
@@ -329,6 +337,8 @@ public class UserControllerTest {
 
     @Test
     public void testRemoveBookmark() throws Exception {
+        // Test to verify the behavior of removing a bookmark from a scan.
+        // Sets up a scan with a given sid and verifies that the scan is correctly saved in the repository without a bookmark status.
         int sid = 1;
         Scan scan = new Scan();
         scan.setSid(sid);
@@ -347,6 +357,8 @@ public class UserControllerTest {
 
     @Test
     public void testViewProfile() throws Exception {
+        // Test to verify the behavior of viewing user profile.
+        // Sets up a user and verifies that the user profile is correctly added to the model and the view is "user/profile".
         Date date = new Date();
         User user = new User("user", date, "user@example.com", "password");
         user.setUid(1);

@@ -52,12 +52,12 @@
     <div class="container-fluid" style="width: 80%; margin: auto;" th:if="${result}">
 
         <!-- if warning, style orange, otherwise green -->
-        <h3 th:style="${website.threatlevel == 'Warning!' ? 'color: orange' : 'color: green'}">
+        <h3 th:if="${website != null}" th:style="${website.threatlevel == 'Warning!' ? 'color: orange' : 'color: green'}">
           <span th:text="${website.threatlevel}"></span>
         </h3>
         
         <br><br>
-        <div>
+        <div th:if="${website != null}">
         <h4>Scan Report:</h4>
           <b style="color: red;">Malicious: </b><span th:text="${website.malicious}"></span><br>
           <b style="color: red;">Suspicious: </b><span th:text="${website.suspicious}"></span><br>
@@ -68,7 +68,7 @@
 
         <!-- OpenAI Summary Section -->
         <br><br>
-        <div id="summary-container">
+        <div id="summary-container" th:if="${summary != null}">
             <h4>OpenAI Summary:</h4>
             <p id="summary-text" th:text="${summary}"></p>
         </div>
