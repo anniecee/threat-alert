@@ -65,6 +65,13 @@
           <b style="color: grey;">Undetected: </b><span th:text="${website.undetected}"></span><br>
           <b style="color: grey;">Timeout: </b><span th:text="${website.timeout}"></span><br>
         </div>
+
+        <!-- OpenAI Summary Section -->
+        <br><br>
+        <div id="summary-container">
+            <h4>OpenAI Summary:</h4>
+            <p id="summary-text" th:text="${summary}"></p>
+        </div>
         
         <br><br>
         <h4>Security Vendors' Analysis:</h4>
