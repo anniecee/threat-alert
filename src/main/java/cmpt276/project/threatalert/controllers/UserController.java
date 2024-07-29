@@ -47,17 +47,19 @@ public class UserController {
 
         } else {
 
-            model.addAttribute("user", user);
+            // model.addAttribute("user", user);
 
-            //show admin page if user is an admin
-            if (user.getType().equals("admin")) {
-                return "redirect:/admin/userview";
-            } 
-            //show scan page for regular user
-            else {
-                // return "redirect:/scan.html";
-                return "scan/urlscan";
-            }
+            return "redirect:/home";
+
+            // //show admin page if user is an admin
+            // if (user.getType().equals("admin")) {
+            //     return "redirect:/admin/userview";
+            // } 
+            // //show scan page for regular user
+            // else {
+            //     // return "redirect:/scan.html";
+            //     return "scan/urlscan";
+            // }
 
         }
 
@@ -85,17 +87,19 @@ public class UserController {
             session = request.getSession(true);
             session.setAttribute("session_user", user);
 
-            model.addAttribute("user", user);
+            return "redirect:/home";
 
-            //show admin page if user is an admin
-            if (user.getType().equals("admin")) {
-                return "redirect:/admin/userview";
-            } 
-            //show scan page for regular user
-            else {
-                // return "redirect:/scan.html";
-                return "redirect:/home";
-            }
+            // model.addAttribute("user", user);
+
+            // //show admin page if user is an admin
+            // if (user.getType().equals("admin")) {
+            //     return "redirect:/admin/userview";
+            // } 
+            // //show scan page for regular user
+            // else {
+            //     // return "redirect:/scan.html";
+            //     return "redirect:/home";
+            // }
 
         }
 
@@ -149,7 +153,7 @@ public class UserController {
             response.setStatus(HttpServletResponse.SC_CREATED);
 
             redirectAttributes.addFlashAttribute("signupSuccess", true);
-            return "redirect:/user/login";
+            return "redirect:/home";
 
         //if in there, redirect back to login saying already have an account
         } else {
@@ -170,17 +174,19 @@ public class UserController {
             return "/user/login";
         }
         //if user is admin, show user view page
-        else if (user.getType().equalsIgnoreCase("admin")) {
-        
-            List<User> userList = userRepo.findAll();
-            model.addAttribute("userList", userList);
-            return "admin/userview";
-
-        }
-        // if not admin, go to home
         else {
-            return "user/invalid";
+            model.addAttribute("user", user);
+            if (user.getType().equalsIgnoreCase("admin")) {
+                List<User> userList = userRepo.findAll();
+                model.addAttribute("userList", userList);
+                return "admin/userview";
+            }
+            // if not admin, go to home
+            else {
+                return "user/invalid";
+            }
         }
+
         
     }
 
@@ -206,26 +212,32 @@ public class UserController {
  
     // }
 
-    @PostMapping("/user/delete")
-    public String deleteUser(@RequestParam("uid") int uid, HttpServletResponse response) {
+    @DeleteMapping("/user/delete")
+    @ResponseBody
+    public String deleteUser(@RequestBody String uid, HttpServletResponse response) {
 
-        List<User> users = userRepo.findByUid(uid);
+        System.out.println("received " + uid);
+        int uidInt = Integer.parseInt(uid);
+        List<User> users = userRepo.findByUid(uidInt);
+        String message;
 
         if (users.isEmpty()) {
-            return "redirect:/admin/userview";
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            message = "User not found, delete unsuccessful";
         }
+        else {
+            User user = users.get(0);
+            // List<Scan> scans = user.getScans();
+            // for (Scan scan : scans) {
+            //     scanRepo.delete(scan);
+            // }
+            userRepo.delete(user);
+            response.setStatus(HttpServletResponse.SC_GONE);
 
-        User user = users.get(0);
+            message = "User successfully deleted";
 
-        List<Scan> scans = user.getScans();
-        for (Scan scan : scans) {
-            scanRepo.delete(scan);
         }
-
-        userRepo.delete(user);
-        response.setStatus(HttpServletResponse.SC_GONE);
-
-        return "redirect:/admin/userview";
+        return message;
     }
     
     @GetMapping("/user/history")
@@ -251,6 +263,7 @@ public class UserController {
             sortByScanDate(history);
         }
 
+        model.addAttribute("user", user);
         model.addAttribute("history", history);
 
         return "user/history";
@@ -271,7 +284,6 @@ public class UserController {
     @ResponseBody
     public String deleteWebsite(@RequestBody String sid, HttpServletResponse response) {
 
-        System.out.println("received wid: " + sid);
         int sidInt = Integer.parseInt(sid);
         List<Scan> scans = scanRepo.findBySid(sidInt);
         String message;
@@ -280,7 +292,6 @@ public class UserController {
             Scan scan = scans.get(0);
 
             User user = scan.getUser();
-            System.out.println("removing: " + scan.getWebsite().getLink() + " " + scan.getScanDate());
             if (scan.isBookmark()) {
                 scan.setToDelete(true);
                 scanRepo.save(scan);
@@ -326,6 +337,7 @@ public class UserController {
             sortByBookmarkDate(bookmarks);
         }
 
+        model.addAttribute("user", user);
         model.addAttribute("bookmarks", bookmarks);
 
         return "user/bookmarks";
@@ -346,7 +358,6 @@ public class UserController {
     @ResponseBody
     public String addBookmark(@RequestBody String sid, HttpServletResponse response) {
 
-        System.out.println("received wid: " + sid);
         int sidInt = Integer.parseInt(sid);
         List<Scan> scans = scanRepo.findBySid(sidInt);
         String message;
@@ -354,7 +365,6 @@ public class UserController {
         if (!scans.isEmpty()) {
             Scan scan = scans.get(0);
 
-            System.out.println("bookmarking " + sid);
             if (scan.isBookmark()) {
                 response.setStatus(HttpServletResponse.SC_ACCEPTED);
                 message = "Item has already been bookmarked";
