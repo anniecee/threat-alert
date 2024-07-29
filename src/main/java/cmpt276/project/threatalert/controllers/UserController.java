@@ -47,8 +47,6 @@ public class UserController {
 
         } else {
 
-            // model.addAttribute("user", user);
-
             //show admin page if user is an admin
             if (user.getType().equals("admin")) {
                 return "redirect:/admin/userview";
@@ -85,19 +83,14 @@ public class UserController {
             session = request.getSession(true);
             session.setAttribute("session_user", user);
 
-            return "redirect:/home";
-
-            // model.addAttribute("user", user);
-
-            // //show admin page if user is an admin
-            // if (user.getType().equals("admin")) {
-            //     return "redirect:/admin/userview";
-            // } 
-            // //show scan page for regular user
-            // else {
-            //     // return "redirect:/scan.html";
-            //     return "redirect:/home";
-            // }
+            //show admin page if user is an admin
+            if (user.getType().equals("admin")) {
+                return "redirect:/admin/userview";
+            } 
+            //show scan page for regular user
+            else {
+                return "redirect:/home";
+            }
 
         }
 
