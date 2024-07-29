@@ -1,4 +1,4 @@
-<!-- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -23,6 +23,7 @@
                   <div class="redirects">
                     <a class="btn btn-header" href="/home">Home<span class="sr-only"></span></a>
                     <a class="btn btn-header" href="/user/history">History<span class="sr-only"></span></a>
+                    <a class="btn btn-header" href="/user/profile">Profile<span class="sr-only"></span></a>
                   </div>
                   <a class="btn btn-dark" href="/user/logout" style="margin-right: 20px;">Log Out</a>
                 </div>
@@ -33,26 +34,10 @@
     <br><br><br>
     <div style="text-align: center;">
       <form class="form-inline d-flex justify-content-center" style="width: 50%; margin:auto" method="post" enctype="multipart/form-data" action="/upload">
-        <input class="form-control mx-2" id="fileInput" type="file" aria-label="File" style="width: 75%; border: 2px solid;" required>
+        <input class="form-control mx-2" id="fileInput" type="file" name="file" style="width: 75%; border: 2px solid;" required>
         <button class="btn btn-primary ml-2" type="submit" style="border: 2px solid;">Scan</button>
       </form>
     </div>
 
 </body>
-</html> -->
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>File Upload</title>
-</head>
-<body>
-    <form method="post" enctype="multipart/form-data" action="/upload">
-        <input type="file" name="file" />
-        <button type="submit">Upload</button>
-    </form>
-</body>
 </html>
-
