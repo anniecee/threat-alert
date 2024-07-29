@@ -49,17 +49,15 @@ public class UserController {
 
             // model.addAttribute("user", user);
 
-            return "redirect:/home";
-
-            // //show admin page if user is an admin
-            // if (user.getType().equals("admin")) {
-            //     return "redirect:/admin/userview";
-            // } 
-            // //show scan page for regular user
-            // else {
-            //     // return "redirect:/scan.html";
-            //     return "scan/urlscan";
-            // }
+            //show admin page if user is an admin
+            if (user.getType().equals("admin")) {
+                return "redirect:/admin/userview";
+            } 
+            //show scan page for regular user
+            else {
+                // return "redirect:/scan.html";
+                return "redirect:/home";
+            }
 
         }
 
