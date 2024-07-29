@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Scanner</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/threatalert.css">
+    <script>
+        function clearResults() {
+            document.getElementById('scanresult').style.display = 'none';
+            document.getElementById('scanresult').innerText = '';
+            document.getElementById('scanerror').style.display = 'none';
+            document.getElementById('scanerror').innerText = '';
+        }
+        
+        function handleFormSubmit(event) {
+            clearResults();
+        }
+  
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelector('form').addEventListener('submit', handleFormSubmit);
+        });
+    </script>
+</head>
+
+<body>
+    
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light navbar-header">
+      <!-- logo -->
+      <a class="navbar-brand mx-4 py-3" href="/landing">
+          <img src="/img/ThreatAlertLogo.png" width="70" class="d-inline-block align-top" alt=""><font size="6"><b>ThreatAlert</b></font>
+      </a>
+      <div class="container-fluid">
+
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+
+          <div class="collapse navbar-collapse navbar justify-content-end" id="navbarNavAltMarkup">
+              <div class="navbar-nav">
+                  <div class="redirects">
+                      <a class="btn btn-header" href="/home">Home<span class="sr-only"></span></a>
+                      <a class="btn btn-header" href="/user/history">History<span class="sr-only"></span></a>
+                      <a class="btn btn-header" href="/user/bookmarks">Bookmarks<span class="sr-only"></span></a>
+                      <a class="btn btn-header" href="/user/profile">Profile<span class="sr-only"></span></a>
+                  </div>
+                <a class="btn btn-dark" href="/user/logout" style="margin-right: 20px;">Log Out</a>
+
+              </div>
+          </div>
+        </div>
+  </nav>
+
+    <br><br><br>
+    <!-- File scanner and button -->
+    <div style="text-align: center;">
+      <form class="form-inline d-flex justify-content-center" th:action="@{/filescan}" method="post" enctype="multipart/form-data" style="width: 50%; margin:auto">
+        <label for="file"></label>
+        <input class="form-control mx-2" id="file" type="file" name="file" required aria-label="File" style="width: 75%; border: 2px solid;">
+        <button class="btn btn-primary ml-2" type="submit" style="border: 2px solid;">Scan</button> 
+      </form>
+    </div>
+
+    <br><br><br>
+    <!-- Result -->
+    <div class="container-fluid" style="width: 80%; margin: auto;" th:if="${result}" id="scanresult">
+
+        <!-- Scan Status -->
+        <h3 th:style="${status == 'queued' ? 'color: orange' : 'color: green'}">
+            <span th:text="'Status: ' + ${status}"></span>
+        </h3>
+
+        <br><br>
+        <!-- File Information -->
+        <h4>File Information:</h4>
+        <p><b>SHA-256:</b> <span th:text="${sha256}"></span></p>
+        <p><b>MD5:</b> <span th:text="${md5}"></span></p>
+        <p><b>SHA-1:</b> <span th:text="${sha1}"></span></p>
+        <p><b>Size:</b> <span th:text="${size}"></span> bytes</p>
+
+        <br><br>
+        <div>
+            <h4>Scan Report:</h4>
+            <b style="color: red;">Malicious: </b><span th:text="${malicious}"></span><br>
+            <b style="color: red;">Suspicious: </b><span th:text="${suspicious}"></span><br>
+            <b style="color: green;">Harmless: </b><span th:text="${harmless}"></span><br>
+            <b style="color: grey;">Undetected: </b><span th:text="${undetected}"></span><br>
+            <b style="color: grey;">Timeout: </b><span th:text="${timeout}"></span><br>
+        </div>
+
+        <!-- OpenAI Summary Section -->
+        <br><br>
+        <div id="summary-container">
+            <h4>OpenAI Summary:</h4>
+            <p id="summary-text" th:text="${summary}"></p>
+        </div>
+    </div>
+
+    <!-- if invalid url scanned -->
+    <div class="container-fluid" style="width: 80%; margin: auto; text-align: center;" id="scanerror">
+        <p style="color: red;" th:text="${error}"></p>
+    </div>
+      
+</body>
+</html>

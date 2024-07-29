@@ -61,7 +61,7 @@ public class UserController {
             //show scan page for regular user
             else {
                 // return "redirect:/scan.html";
-                return "scan/urlscan";
+                return "redirect:/home";
             }
 
         }
