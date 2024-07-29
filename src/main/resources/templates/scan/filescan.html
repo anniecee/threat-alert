@@ -41,10 +41,12 @@
           <div class="collapse navbar-collapse navbar justify-content-end" id="navbarNavAltMarkup">
               <div class="navbar-nav">
                   <div class="redirects">
-                      <a class="btn btn-header" href="/home">Home<span class="sr-only"></span></a>
-                      <a class="btn btn-header" href="/user/history">History<span class="sr-only"></span></a>
-                      <a class="btn btn-header" href="/user/bookmarks">Bookmarks<span class="sr-only"></span></a>
-                      <a class="btn btn-header" href="/user/profile">Profile<span class="sr-only"></span></a>
+                    <a th:if="${user.type == 'admin'}" class="btn btn-header" href="/admin/userview">Admin Page<span class="sr-only"></span></a>
+                    <a class="btn btn-header" href="/filescan">Scan Files<span class="sr-only"></span></a>
+                    <a class="btn btn-header" href="/home">Home<span class="sr-only"></span></a>
+                    <a class="btn btn-header" href="/user/history">History<span class="sr-only"></span></a>
+                    <a class="btn btn-header" href="/user/bookmarks">Bookmarks<span class="sr-only"></span></a>
+                    <a class="btn btn-header" href="/user/profile">Profile<span class="sr-only"></span></a>
                   </div>
                 <a class="btn btn-dark" href="/user/logout" style="margin-right: 20px;">Log Out</a>
 
