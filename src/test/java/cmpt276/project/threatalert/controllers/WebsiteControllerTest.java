@@ -40,4 +40,22 @@ public class WebsiteControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/landing"));
     }
+
+    @Test
+    public void testHome() throws Exception {
+        // Perform GET request to /hom
+        // Verifies that status is OK (200) and the view name to be "scan/urlscan"
+        mockMvc.perform(get("/home"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("scan/urlscan"));
+    }
+
+    @Test
+    public void testScan() throws Exception {
+        // Perform GET request to /scan
+        // Verifies that status is OK (200) and the view name to be "scan/urlscan"
+        mockMvc.perform(get("/scan"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("scan/urlscan"));
+    }
 }

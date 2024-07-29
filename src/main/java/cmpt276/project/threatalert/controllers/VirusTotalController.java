@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -21,6 +22,7 @@ import cmpt276.project.threatalert.models.UserRepository;
 import cmpt276.project.threatalert.models.Website;
 import cmpt276.project.threatalert.models.WebsiteRepository;
 import cmpt276.project.threatalert.services.VirusTotalService;
+import cmpt276.project.threatalert.services.OpenAIService;
 import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
@@ -32,6 +34,9 @@ public class VirusTotalController {
 
     @Autowired
     private VirusTotalService virusTotalService;
+
+    @Autowired
+    private OpenAIService openAIService;
 
     @Autowired
     private WebsiteRepository websiteRepo;
@@ -103,8 +108,6 @@ public class VirusTotalController {
             userRepo.save(user);
             logger.info("saved to user repo");
 
-
-
             model.addAttribute("website", website);
 
             // Display scan result
@@ -117,6 +120,25 @@ public class VirusTotalController {
         }
 
         return "scan/urlscan";
+    }
+
+    @PostMapping("/filescan")
+    public String handleFileUpload(@RequestParam("file") MultipartFile file, Model model) {
+
+        logger.info("Received file for scanning: {}", file);
+        try {
+
+            String fileResult = virusTotalService.scanFile(file);
+            displayFileResult(fileResult, model);
+            model.addAttribute("result", fileResult);
+
+        } catch (IOException | InterruptedException e) {
+            logger.error("Error scanning file: {}", e.getMessage(), e);
+            model.addAttribute("result", "Error: " + e.getMessage());
+        }
+
+        return "scan/filescan";
+
     }
 
     private Website createWebsite(String url, String result) {
@@ -133,7 +155,54 @@ public class VirusTotalController {
         return website;
     }
 
+    private void displayFileResult(String scanResultString, Model model) {
+        // Create JsonObject from scan result string
+        JsonObject result = JsonParser.parseString(scanResultString).getAsJsonObject();
+    
+        // Get file info
+        JsonObject fileInfo = result.getAsJsonObject("meta").getAsJsonObject("file_info");
+        String sha256 = fileInfo.getAsJsonPrimitive("sha256").getAsString();
+        String md5 = fileInfo.getAsJsonPrimitive("md5").getAsString();
+        String sha1 = fileInfo.getAsJsonPrimitive("sha1").getAsString();
+        long size = fileInfo.getAsJsonPrimitive("size").getAsLong();
+    
+        // Get scan status and stats
+        JsonObject attributes = result.getAsJsonObject("data").getAsJsonObject("attributes");
+        String status = attributes.getAsJsonPrimitive("status").getAsString();
+        JsonObject stats = attributes.getAsJsonObject("stats");
+        int malicious = stats.getAsJsonPrimitive("malicious").getAsInt();
+        int suspicious = stats.getAsJsonPrimitive("suspicious").getAsInt();
+        int undetected = stats.getAsJsonPrimitive("undetected").getAsInt();
+        int harmless = stats.getAsJsonPrimitive("harmless").getAsInt();
+        int timeout = stats.getAsJsonPrimitive("timeout").getAsInt();
+    
+        // Add file info to model
+        model.addAttribute("sha256", sha256);
+        model.addAttribute("md5", md5);
+        model.addAttribute("sha1", sha1);
+        model.addAttribute("size", size);
+    
+        // Add scan status and stats to model
+        model.addAttribute("status", status);
+        model.addAttribute("malicious", malicious);
+        model.addAttribute("suspicious", suspicious);
+        model.addAttribute("undetected", undetected);
+        model.addAttribute("harmless", harmless);
+        model.addAttribute("timeout", timeout);
+    
+        // Generate the summary from OpenAIService
+        try {
+            String summary = openAIService.summarize(scanResultString);
+            model.addAttribute("summary", summary);
+        } catch (IOException | InterruptedException e) {
+            logger.error("Error summarizing scan result: {}", e.getMessage(), e);
+            model.addAttribute("summary", "Error summarizing scan result.");
+        }
+    }
+    
+
     private void displayResult(String scanResultString, Model model) {
+        
         // Create JsonObject from scan result string
         JsonObject result = JsonParser.parseString(scanResultString).getAsJsonObject();
         
@@ -158,6 +227,15 @@ public class VirusTotalController {
             vendorResults.add(entryMap);
         }
         model.addAttribute("vendorResults", vendorResults);
+
+        // Generate the summary from OpenAIService
+        try {
+            String summary = openAIService.summarize(scanResultString);
+            model.addAttribute("summary", summary);
+        } catch (IOException | InterruptedException e) {
+            logger.error("Error summarizing scan result: {}", e.getMessage(), e);
+            model.addAttribute("summary", "Error summarizing scan result.");
+        }
     }
 
 }
