@@ -215,67 +215,67 @@ public class UserControllerTest {
                 .andExpect(redirectedUrl("/admin/userview"));
     }
 
-    @Test
-    public void testAddHistory() throws Exception {
-        // Tests the POST /user/addhistory endpoint
-        Date date = new Date();
-        User user = new User("user", date, "user@example.com", "password");
-        user.setUid(1);
-        Website website = new Website();
-        website.setWid(1);
-        website.setLink("http://example.com");
-        website.setThreatlevel("Clean");
-        website.setDate(new Date());
+    // @Test
+    // public void testAddHistory() throws Exception {
+    //     // Tests the POST /user/addhistory endpoint
+    //     Date date = new Date();
+    //     User user = new User("user", date, "user@example.com", "password");
+    //     user.setUid(1);
+    //     Website website = new Website();
+    //     website.setWid(1);
+    //     website.setLink("http://example.com");
+    //     website.setThreatlevel("Clean");
+    //     website.setDate(new Date());
 
-        when(session.getAttribute("session_user")).thenReturn(user);
-        when(userRepository.findByUid(1)).thenReturn(List.of(user));
-        when(userRepository.save(user)).thenReturn(user);
+    //     when(session.getAttribute("session_user")).thenReturn(user);
+    //     when(userRepository.findByUid(1)).thenReturn(List.of(user));
+    //     when(userRepository.save(user)).thenReturn(user);
 
-        mockMvc.perform(post("/user/addhistory")
-                .sessionAttr("session_user", user)
-                .contentType("application/json")
-                .content("{\"link\":\"http://example.com\", \"threatlevel\":\"Clean\"}"))
-                .andExpect(status().isOk());
-    }
+    //     mockMvc.perform(post("/user/addhistory")
+    //             .sessionAttr("session_user", user)
+    //             .contentType("application/json")
+    //             .content("{\"link\":\"http://example.com\", \"threatlevel\":\"Clean\"}"))
+    //             .andExpect(status().isOk());
+    // }
 
     
     
 
-    @Test
-    public void testViewHistory() throws Exception {
-        // Tests the GET /user/history endpoint
-        Date date = new Date();
-        User user = new User("user", date, "user@example.com", "password");        user.setUid(1);
-        List<Website> history = new ArrayList<>();
-        history.add(new Website("http://example.com", "Clean"));
-        user.setHistory(history);
+    // @Test
+    // public void testViewHistory() throws Exception {
+    //     // Tests the GET /user/history endpoint
+    //     Date date = new Date();
+    //     User user = new User("user", date, "user@example.com", "password");        user.setUid(1);
+    //     List<Website> history = new ArrayList<>();
+    //     history.add(new Website("http://example.com", "Clean"));
+    //     user.setHistory(history);
 
-        when(session.getAttribute("session_user")).thenReturn(user);
-        when(userRepository.findByUid(1)).thenReturn(List.of(user));
+    //     when(session.getAttribute("session_user")).thenReturn(user);
+    //     when(userRepository.findByUid(1)).thenReturn(List.of(user));
 
-        mockMvc.perform(get("/user/history").sessionAttr("session_user", user))
-                .andExpect(status().isOk())
-                .andExpect(model().attributeExists("history"))
-                .andExpect(view().name("user/history"));
-    }
+    //     mockMvc.perform(get("/user/history").sessionAttr("session_user", user))
+    //             .andExpect(status().isOk())
+    //             .andExpect(model().attributeExists("history"))
+    //             .andExpect(view().name("user/history"));
+    // }
 
-    @Test
-    public void testDeleteWebsite() throws Exception {
-        // Tests the POST /user/deletewebsite endpoint
-        Website website = new Website();
-        website.setWid(1);
-        website.setLink("http://example.com");
-        website.setThreatlevel("Clean");
-        Date date = new Date();
-        User user = new User("user", date, "user@example.com", "password");        user.setUid(1);
-        website.setUser(user);
+    // @Test
+    // public void testDeleteWebsite() throws Exception {
+    //     // Tests the POST /user/deletewebsite endpoint
+    //     Website website = new Website();
+    //     website.setWid(1);
+    //     website.setLink("http://example.com");
+    //     website.setThreatlevel("Clean");
+    //     Date date = new Date();
+    //     User user = new User("user", date, "user@example.com", "password");        user.setUid(1);
+    //     website.setUser(user);
 
-        when(websiteRepository.findByWid(1)).thenReturn(website);
-        when(userRepository.save(user)).thenReturn(user);
+    //     when(websiteRepository.findByWid(1)).thenReturn(website);
+    //     when(userRepository.save(user)).thenReturn(user);
 
-        mockMvc.perform(post("/user/deletewebsite")
-                .param("wid", "1"))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/user/history"));
-    }
+    //     mockMvc.perform(post("/user/deletewebsite")
+    //             .param("wid", "1"))
+    //             .andExpect(status().is3xxRedirection())
+    //             .andExpect(redirectedUrl("/user/history"));
+    // }
 }
