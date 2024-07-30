@@ -239,3 +239,35 @@ td.threat-type {
     position: static;
     z-index: 999;
 }
+
+.nav-tabs-container {
+    display: flex;
+    justify-content: center;
+}
+
+.nav-tabs {
+    width: fit-content;
+    border-bottom: 2px solid #ddd;
+    justify-content: center;
+}
+.nav-tabs .nav-link {
+    width: 300px;
+    border: none;
+    color: #555;
+    font-weight: bold;
+    text-align: center;
+}
+.nav-tabs .nav-link:hover {
+    border: none;
+    color: #0056b3;
+}
+.nav-tabs .nav-link.active {
+    color: #007bff;
+    background-color: transparent;
+    border-color: transparent;
+    border-bottom: 2px solid #007bff;
+}
+.nav-tabs .nav-link.active:hover {
+    color: #0056b3;
+    border-bottom: 2px solid #0056b3;
+}
