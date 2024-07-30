@@ -11,8 +11,6 @@ public class Website {
     private int wid;
 
     private String threatlevel;
-
-    @Column(unique=true)
     private String link;
 
     private int malicious;
@@ -24,7 +22,7 @@ public class Website {
     @OneToMany(mappedBy = "website", cascade = CascadeType.ALL)
     private List<Scan> scans;
 
-    @OneToMany(mappedBy = "website")
+    @OneToMany(mappedBy = "website", cascade = CascadeType.REMOVE)
     private List<Comment> comments;
 
     public Website() {}
@@ -41,15 +39,10 @@ public class Website {
         this.undetected = undetected;
         this.harmless = harmless;
         this.timeout = timeout;
-        if (malicious + suspicious > 5) {
-            this.threatlevel = "Warning!";
-        }
-        else {
-            this.threatlevel = "Clean!";
-        }
-        this.comments = new ArrayList<>();
-        //this.threatlevel = (malicious + suspicious > 5) ? "Warning!" : "Clean!";
+		
+        this.threatlevel = (malicious + suspicious > 5) ? "Warning!" : "Clean!";
         this.scans = new ArrayList<>();
+        this.comments = new ArrayList<>();
 
     }
 
@@ -131,6 +124,10 @@ public class Website {
         }
         comments.add(comment);
     }
+
+    public void removeComment(Comment comment){
+        comments.remove(comment);
+    }
     
     public List<Scan> getScans() {
         return scans;
@@ -150,4 +147,5 @@ public class Website {
     public void removeScan(Scan scan) {
         scans.remove(scan);
     }
+    
 }
