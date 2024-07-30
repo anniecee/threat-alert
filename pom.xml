@@ -85,12 +85,6 @@
     	</dependency>
 
 		<dependency>
-			<groupId>com.github.Cloudmersive</groupId>
-			<artifactId>Cloudmersive.APIClient.Java</artifactId>
-			<version>v4.25</version>
-		</dependency>
-
-		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
 			<version>4.0.1</version> 

@@ -38,7 +38,14 @@ async function addCommentjs(event) {
 
             // Create a new row
             var table = document.getElementById('CommentTable');
-            var row = table.insertRow(1); 
+            var tbody = table.getElementsByTagName('tbody')[0];
+
+            // Check if the table only has 1 row and 0 comment
+            if (tbody.rows.length === 1 && tbody.rows[0].cells[0].colSpan === 4) {
+                tbody.deleteRow(0);
+            }
+
+            var row = tbody.insertRow(0); 
             row.id = "comment-" + commentId;
 
             // Insert new cells
@@ -48,13 +55,15 @@ async function addCommentjs(event) {
             var cell4 = row.insertCell(3);
 
             // Add the data to the new cells
-            cell1.innerHTML = user;
+            cell1.innerHTML = '<h6 style="color: blue;">' + user + '</h6>';
             cell2.innerHTML = comment;
             cell3.innerHTML = formattedDate;
             
             // Create delete button
             var deleteButton = document.createElement('button');
             deleteButton.textContent = 'Delete';
+            deleteButton.type = 'button';
+            deleteButton.className = 'btn btn-danger';
             deleteButton.onclick = function(event) {
                 deleteComment(event, commentId);
             };
@@ -85,6 +94,15 @@ async function deleteComment(event, commentId) {
         // console.log(response);
         if (response.ok) {
             document.getElementById(`comment-${commentId}`).remove();
+            var table = document.getElementById('CommentTable');
+            var tbody = table.getElementsByTagName('tbody')[0];
+            if (tbody.rows.length === 0) {
+                var newRow = tbody.insertRow(0);
+                var newCell = newRow.insertCell(0);
+                newCell.colSpan = 4;
+                newCell.className = 'text-center';
+                newCell.textContent = 'Be the first to leave a comment';
+            }
         } else {
             console.error('Failed to delete comment:', response.statusText);
         }

@@ -2,49 +2,81 @@ package cmpt276.project.threatalert.models;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 public class WebsiteRepositoryTest {
 
     @Mock
     private WebsiteRepository websiteRepository;
 
-    @InjectMocks
-    private WebsiteRepositoryTest websiteRepositoryTest;
+    private Website website;
 
     @BeforeEach
     public void setUp() {
-        // Initializes mock objects before each test
-        MockitoAnnotations.openMocks(this);
+        website = new Website();
+        website.setWid(1);
+        website.setLink("https://example.com");
     }
 
+    // Test finding a Website by WID
+    @Test
+    public void testFindByWid() {
+        when(websiteRepository.findByWid(1)).thenReturn(List.of(website));
+
+        List<Website> foundWebsites = websiteRepository.findByWid(1);
+
+        assertFalse(foundWebsites.isEmpty());
+        assertEquals(1, foundWebsites.size());
+        assertEquals(website.getWid(), foundWebsites.get(0).getWid());
+        assertEquals(website.getLink(), foundWebsites.get(0).getLink());
+
+        verify(websiteRepository, times(1)).findByWid(1);
+    }
+
+    // Test finding a Website by link
     @Test
     public void testFindByLink() {
-        // Tests the findByLink method of the WebsiteRepository
-        String link = "http://example.com";
-        Website website = new Website(link, "Clean");
-        List<Website> expectedWebsites = new ArrayList<>();
-        expectedWebsites.add(website);
+        when(websiteRepository.findByLink("https://example.com")).thenReturn(List.of(website));
 
-        // Sets up the mock behavior
-        when(websiteRepository.findByLink(link)).thenReturn(expectedWebsites);
+        List<Website> foundWebsites = websiteRepository.findByLink("https://example.com");
 
-        // Calls the method to test
-        List<Website> foundWebsites = websiteRepository.findByLink(link);
-
-        // Asserts the expected behavior
+        assertFalse(foundWebsites.isEmpty());
         assertEquals(1, foundWebsites.size());
-        assertEquals(link, foundWebsites.get(0).getLink());
-        assertEquals("Clean", foundWebsites.get(0).getThreatlevel());
+        assertEquals(website.getWid(), foundWebsites.get(0).getWid());
+        assertEquals(website.getLink(), foundWebsites.get(0).getLink());
+
+        verify(websiteRepository, times(1)).findByLink("https://example.com");
+    }
+
+    // Test finding a Website by a non-existent WID
+    @Test
+    public void testFindByNonExistentWid() {
+        when(websiteRepository.findByWid(999)).thenReturn(List.of());
+
+        List<Website> foundWebsites = websiteRepository.findByWid(999);
+
+        assertTrue(foundWebsites.isEmpty());
+
+        verify(websiteRepository, times(1)).findByWid(999);
+    }
+
+    // Test finding a Website by a non-existent link
+    @Test
+    public void testFindByNonExistentLink() {
+        when(websiteRepository.findByLink("https://nonexistent.com")).thenReturn(List.of());
+
+        List<Website> foundWebsites = websiteRepository.findByLink("https://nonexistent.com");
+
+        assertTrue(foundWebsites.isEmpty());
+
+        verify(websiteRepository, times(1)).findByLink("https://nonexistent.com");
     }
 }

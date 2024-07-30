@@ -25,6 +25,8 @@
             <div class="collapse navbar-collapse navbar justify-content-end" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
                     <div class="redirects">
+                        <a th:if="${user.type == 'admin'}" class="btn btn-header" href="/admin/userview">Admin Page<span class="sr-only"></span></a>
+                        <a class="btn btn-header" href="/filescan">Scan Files<span class="sr-only"></span></a>
                         <a class="btn btn-header" href="/home">Home<span class="sr-only"></span></a>
                         <a class="btn btn-header" href="/user/history">History<span class="sr-only"></span></a>
                         <a class="btn btn-header" href="/user/bookmarks">Bookmarks<span class="sr-only"></span></a>
@@ -84,8 +86,9 @@
                     <span th:text="${#dates.format(scan.scanDate, 'MMMMM dd, yyyy h:mma')}"></span>
                 </td>
                 <td>
-                    <form th:onsubmit="'javascript:addBookmark(event, ' + ${scan.sid} + ');'">
-                        <input type="submit" class="link-primary link-delete" value="BOOKMARK">
+                    <form class="form-bookmark" th:onsubmit="'javascript:addBookmark(event, ' + ${scan.sid} + ');'">
+                        <input th:if="${!scan.bookmark}" type="submit" class="link-primary link-delete" value="BOOKMARK">
+                        <span th:unless="${!scan.bookmark}" style="cursor: default;">BOOKMARKED</span>
                     </form>
                     <form th:onsubmit="'javascript:deleteFromHistory(event, ' + ${scan.sid} + ');'" >
                         <input type="submit" class="link-danger link-delete" value="DELETE">
