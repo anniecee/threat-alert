@@ -32,6 +32,8 @@ function addBookmark(event, wid) {
     event.preventDefault();
 
     wid = wid.toString();
+    const self = event.target.closest('.form-bookmark');
+    self.innerHTML = "<span style='cursor: default;'>BOOKMARKED</span>"
 
     const url = "/user/addbookmark";
     const options = {

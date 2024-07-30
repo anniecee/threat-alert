@@ -64,13 +64,12 @@ public class VirusTotalController {
             }
             User user = optionalUser.get();
             logger.info("User found: id = {}, email = {}", user.getUid(), user.getEmail());
+            model.addAttribute("user", user);
             
             String result = virusTotalService.scanUrl(url);
 
             List<Website> websites = websiteRepo.findByLink(url);
             Website website;
-            System.out.println("user id " + user.getUid());
-            System.out.println("user email " + user.getEmail());
             if (websites.isEmpty()) {
                 logger.info("\nwebsite not in repo");
                 // Verify the scan result
@@ -82,31 +81,19 @@ public class VirusTotalController {
                 }
                 //helper function below
                 website = createWebsite(url, result);
-                
             }
             else {
                 logger.info("\nwebsite in repo");
                 website = websites.get(0);
-                // website = createWebsite(url, result);
             }
             
             Scan scan = new Scan(website);
+            
             websiteRepo.save(website);
-            logger.info("saved to web repo");
-
-            //verify scan object
-            System.out.println("verifying scan");
-            System.out.println("url " + scan.getWebsite().getLink());
-            System.out.println("scan date " + scan.getScanDate());
-
             user.addScan(scan);
-            logger.info("added scan to user");
             scan.setUser(user);
-            logger.info("set user of scan");
             scanRepo.save(scan);
-            logger.info("saved to scan repo");
             userRepo.save(user);
-            logger.info("saved to user repo");
 
             model.addAttribute("website", website);
 

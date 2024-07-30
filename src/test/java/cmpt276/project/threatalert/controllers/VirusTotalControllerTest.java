@@ -51,7 +51,7 @@ public class VirusTotalControllerTest {
 
     @BeforeEach
     public void setUp() {
-        user = new User("user", new Date(), "user@example.com", "password");
+        user = new User("user", "user@example.com", "password");
         user.setUid(1);
     }
 

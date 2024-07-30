@@ -68,9 +68,8 @@ public class UserControllerTest {
 
     @Test
     public void testGetLoginRegularUserLoggedIn() throws Exception {
-        Date date = new Date();
         // Test the GET /user/login endpoint when a regular user is logged in
-        User regularUser = new User("user", date, "user@example.com", "password");
+        User regularUser = new User("user", "user@example.com", "password");
         when(session.getAttribute("session_user")).thenReturn(regularUser);
 
         mockMvc.perform(get("/user/login").sessionAttr("session_user", regularUser))
@@ -109,8 +108,7 @@ public class UserControllerTest {
     @Test
     public void testLoginValidRegularUserCredentials() throws Exception {
         // Tests the POST /user/login endpoint with valid regular user credentials
-        Date date = new Date();
-        User regularUser = new User("user", date, "user@example.com", "password");
+        User regularUser = new User("user", "user@example.com", "password");
         List<User> userList = new ArrayList<>();
         userList.add(regularUser);
         when(userRepository.findByEmailAndPassword("user@example.com", "password")).thenReturn(userList);
@@ -153,8 +151,7 @@ public class UserControllerTest {
     @Test
     public void testSignupEmailAlreadyExists() throws Exception {
         // Tests the POST /user/signup endpoint when the email already exists
-        Date date = new Date();
-        User existingUser = new User("user", date, "user@example.com", "password");
+        User existingUser = new User("user", "user@example.com", "password");
         List<User> userList = new ArrayList<>();
         userList.add(existingUser);
         when(userRepository.findByEmail("user@example.com")).thenReturn(userList);
@@ -186,9 +183,8 @@ public class UserControllerTest {
         // Tests the GET /admin/userview endpoint for an admin user
         User adminUser = new User("admin@example.com", "password", "admin");
         List<User> userList = new ArrayList<>();
-        Date date = new Date();
-        userList.add(new User("user", date, "user1@example.com", "password"));
-        userList.add(new User("user", date, "user2@example.com", "password"));
+        userList.add(new User("user", "user1@example.com", "password"));
+        userList.add(new User("user", "user2@example.com", "password"));
         when(session.getAttribute("session_user")).thenReturn(adminUser);
         when(userRepository.findAll()).thenReturn(userList);
 
@@ -201,8 +197,7 @@ public class UserControllerTest {
     @Test
     public void testShowUsersNotAdmin() throws Exception {
         // Tests the GET /admin/userview endpoint for a non-admin user
-        Date date = new Date();
-        User regularUser = new User("user", date, "user@example.com", "password");
+        User regularUser = new User("user", "user@example.com", "password");
         when(session.getAttribute("session_user")).thenReturn(regularUser);
 
         mockMvc.perform(get("/admin/userview").sessionAttr("session_user", regularUser))
@@ -246,8 +241,7 @@ public class UserControllerTest {
     public void testViewHistory() throws Exception {
         // Test to verify the behavior of viewing user history.
         // Sets up a user with a scan history and verifies that the history is correctly added to the model and the view is "user/history".
-        Date date = new Date();
-        User user = new User("user", date, "user@example.com", "password");
+        User user = new User("user", "user@example.com", "password");
         user.setUid(1);
 
         Website website = new Website("http://example.com", "Clean");
@@ -270,8 +264,7 @@ public class UserControllerTest {
         // Test to verify the behavior of deleting a scan from user history.
         // Sets up a scan with a given sid and verifies that the scan is correctly deleted from the repository and the status is 410 Gone.
         int sid = 1;
-        Date date = new Date();
-        User user = new User("user", date, "user@example.com", "password");
+        User user = new User("user", "user@example.com", "password");
         user.setUid(1);
 
         Website website = new Website("http://example.com", "Clean");
@@ -295,8 +288,7 @@ public class UserControllerTest {
     public void testViewBookmarks() throws Exception {
         // Test to verify the behavior of viewing user bookmarks.
         // Sets up a user with bookmarked scans and verifies that the bookmarks are correctly added to the model and the view is "user/bookmarks".
-        Date date = new Date();
-        User user = new User("user", date, "user@example.com", "password");
+        User user = new User("user", "user@example.com", "password");
         user.setUid(1);
 
         Website website = new Website("http://example.com", "Clean");
@@ -359,8 +351,7 @@ public class UserControllerTest {
     public void testViewProfile() throws Exception {
         // Test to verify the behavior of viewing user profile.
         // Sets up a user and verifies that the user profile is correctly added to the model and the view is "user/profile".
-        Date date = new Date();
-        User user = new User("user", date, "user@example.com", "password");
+        User user = new User("user", "user@example.com", "password");
         user.setUid(1);
 
         when(session.getAttribute("session_user")).thenReturn(user);
