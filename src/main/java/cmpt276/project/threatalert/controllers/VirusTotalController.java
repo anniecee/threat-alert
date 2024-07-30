@@ -110,10 +110,24 @@ public class VirusTotalController {
     }
 
     @PostMapping("/filescan")
-    public String handleFileUpload(@RequestParam("file") MultipartFile file, Model model) {
+    public String handleFileUpload(@RequestParam("file") MultipartFile file, Model model, HttpSession session) {
 
         logger.info("Received file for scanning: {}", file);
         try {
+
+            User sessionUser = (User) session.getAttribute("session_user");
+            if (sessionUser == null) {
+                return "redirect:/user/login";
+            }
+            // Fetch the user from the repository to ensure it's persisted
+            Optional<User> optionalUser = userRepo.findById(sessionUser.getUid());
+            if (!optionalUser.isPresent()) {
+                model.addAttribute("error", "User not found. Please log in again.");
+                return "redirect:/user/login";
+            }
+            User user = optionalUser.get();
+            logger.info("User found: id = {}, email = {}", user.getUid(), user.getEmail());
+            model.addAttribute("user", user);
 
             String fileResult = virusTotalService.scanFile(file);
             displayFileResult(fileResult, model);
