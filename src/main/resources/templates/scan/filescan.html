@@ -12,14 +12,19 @@
             document.getElementById('scanresult').innerText = '';
             document.getElementById('scanerror').style.display = 'none';
             document.getElementById('scanerror').innerText = '';
+            document.getElementById('features').style.display = 'block';
         }
         
         function handleFormSubmit(event) {
             clearResults();
+            document.getElementById('features').style.display = 'none';
         }
   
         document.addEventListener('DOMContentLoaded', function() {
             document.querySelector('form').addEventListener('submit', handleFormSubmit);
+            if (document.getElementById('scanresult').style.display !== 'none') {
+              document.getElementById('features').style.display = 'none';
+          }
         });
     </script>
 </head>
@@ -28,32 +33,44 @@
     
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light navbar-header">
-      <!-- logo -->
-      <a class="navbar-brand mx-4 py-3" href="/landing">
-          <img src="/img/ThreatAlertLogo.png" width="70" class="d-inline-block align-top" alt=""><font size="6"><b>ThreatAlert</b></font>
-      </a>
-      <div class="container-fluid">
-
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-
-          <div class="collapse navbar-collapse navbar justify-content-end" id="navbarNavAltMarkup">
-              <div class="navbar-nav">
-                  <div class="redirects">
-                    <a th:if="${user.type == 'admin'}" class="btn btn-header" href="/admin/userview">Admin Page<span class="sr-only"></span></a>
-                    <a class="btn btn-header" href="/home">URL Scan<span class="sr-only"></span></a>
-                    <a class="btn btn-header" href="/filescan">File Scan<span class="sr-only"></span></a>
-                    <a class="btn btn-header" href="/user/history">History<span class="sr-only"></span></a>
-                    <a class="btn btn-header" href="/user/bookmarks">Bookmarks<span class="sr-only"></span></a>
-                    <a class="btn btn-header" href="/user/profile">Profile<span class="sr-only"></span></a>
-                  </div>
-                <a class="btn btn-dark" href="/user/logout" style="margin-right: 20px;">Log Out</a>
-
-              </div>
+        <!-- logo -->
+        <a class="navbar-brand mx-4 py-3" href="/landing">
+            <img src="/img/ThreatAlertLogo.png" width="70" class="d-inline-block align-top" alt=""><font size="6"><b>ThreatAlert</b></font>
+        </a>
+        <div class="container-fluid">
+  
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+  
+            <div class="collapse navbar-collapse navbar justify-content-end" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                    <div class="redirects">
+                        <a th:if="${user.type == 'admin'}" class="btn btn-header" href="/admin/userview">Admin Page<span class="sr-only"></span></a>
+                        <a class="btn btn-header" href="/home">Home<span class="sr-only"></span></a>
+                        <a class="btn btn-header" href="/user/history">History<span class="sr-only"></span></a>
+                        <a class="btn btn-header" href="/user/bookmarks">Bookmarks<span class="sr-only"></span></a>
+                        <a class="btn btn-header" href="/user/profile">Profile<span class="sr-only"></span></a>
+                    </div>
+                  <a class="btn btn-dark" href="/user/logout" style="margin-right: 20px;">Log Out</a>
+  
+                </div>
+            </div>
           </div>
-        </div>
-  </nav>
+      </nav>
+
+  <br><br><br>
+    <!-- Scans Buttons -->
+    <div class="nav-tabs-container">
+        <ul class="nav nav-tabs">
+          <li class="nav-item">
+              <a class="nav-link" href="/home">URL</a>
+          </li>
+          <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="/filescan">File</a>
+          </li>
+        </ul>
+      </div>
 
     <br><br><br>
     <!-- File scanner and button -->
@@ -63,6 +80,50 @@
         <input class="form-control mx-2" id="file" type="file" name="file" required aria-label="File" style="width: 75%; border: 2px solid; vertical-align: middle; padding: 11px;">
         <button class="btn btn-primary ml-2" type="submit" style="border: 2px solid;">Scan</button> 
       </form>
+    </div>
+
+    <br><br><br>
+    <!-- Instructions -->
+    <div id="instructions" class="container-fluid" style="width: 80%; margin: auto;">
+      <div class="row justify-content-center">
+        <div class="container-ta-features d-flex align-items-center">
+            <div class="row">
+                <div class="landing-features col-md-4 row">
+                    <div class="col-md-2">
+                        <div class="circle">1</div>
+                    </div>
+                    <div class="col-md-10">
+                        <header class="header-ta-features">Enter URL or File</header>
+                        <p class="p-ta-features">
+                            Enter the URL you want to scan for threats or choose a file from your device.
+                        </p>
+                    </div>
+                </div>
+                <div class="landing-features col-md-4 row">
+                    <div class="col-md-2">
+                        <div class="circle">2</div>
+                    </div>
+                    <div class="col-md-10">
+                        <header class="header-ta-features">Initiate Scan</header>
+                        <p class="p-ta-features">
+                            Click the 'Scan' button to start scanning the URL or file for potential threats.
+                        </p>
+                    </div>
+                </div>
+                <div class="landing-features col-md-4 row">
+                    <div class="col-md-2">
+                        <div class="circle">3</div>
+                    </div>
+                    <div class="col-md-10">
+                        <header class="header-ta-features">View Results</header>
+                        <p class="p-ta-features">
+                            Once the scan is complete, view the detailed results to see if any threats were detected.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+      </div>
     </div>
 
     <br><br><br>

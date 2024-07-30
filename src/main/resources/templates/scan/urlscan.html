@@ -13,14 +13,19 @@
           document.getElementById('scanresult').innerText = '';
           document.getElementById('scanerror').style.display = 'none';
           document.getElementById('scanerror').innerText = '';
+          document.getElementById('features').style.display = 'block';
       }
       
       function handleFormSubmit(event) {
           clearResults();
+          document.getElementById('features').style.display = 'none';
       }
 
       document.addEventListener('DOMContentLoaded', function() {
           document.querySelector('form').addEventListener('submit', handleFormSubmit);
+          if (document.getElementById('scanresult').style.display !== 'none') {
+              document.getElementById('features').style.display = 'none';
+          }
       });
   </script>
   </head>
@@ -43,8 +48,7 @@
               <div class="navbar-nav">
                   <div class="redirects">
                       <a th:if="${user.type == 'admin'}" class="btn btn-header" href="/admin/userview">Admin Page<span class="sr-only"></span></a>
-                      <a class="btn btn-header" href="/home">URL Scan<span class="sr-only"></span></a>
-                      <a class="btn btn-header" href="/filescan">File Scan<span class="sr-only"></span></a>
+                      <a class="btn btn-header" href="/home">Home<span class="sr-only"></span></a>
                       <a class="btn btn-header" href="/user/history">History<span class="sr-only"></span></a>
                       <a class="btn btn-header" href="/user/bookmarks">Bookmarks<span class="sr-only"></span></a>
                       <a class="btn btn-header" href="/user/profile">Profile<span class="sr-only"></span></a>
@@ -54,7 +58,20 @@
               </div>
           </div>
         </div>
-  </nav>
+    </nav>
+
+  <br><br><br>
+    <!-- Scans Buttons -->
+    <div class="nav-tabs-container">
+      <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="/home">URL</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/filescan">File</a>
+        </li>
+      </ul>
+    </div>
 
     <br><br><br>
     <!-- URL scanner and button -->
@@ -64,6 +81,61 @@
         <input class="form-control mx-2" id="url" type="link" name="url" required placeholder="Enter URL here to scan for threats" aria-label="Link" style="width: 75%; border: 2px solid; ">
         <button class="btn btn-primary ml-2" type="submit" style="border: 2px solid;">Scan</button> 
       </form>
+    </div>
+
+    <br><br><br>
+    <!-- Instructions -->
+    <div id="instructions" class="container-fluid" style="width: 80%; margin: auto;">
+      <div class="row justify-content-center">
+        <div class="container-ta-features d-flex align-items-center">
+            <div class="row">
+                <div class="landing-features col-md-3 row">
+                    <div class="col-md-2">
+                        <div class="circle">1</div>
+                    </div>
+                    <div class="col-md-10">
+                        <header class="header-ta-features">Enter URL or File</header>
+                        <p class="p-ta-features">
+                            Enter the URL you want to scan for threats or choose a file from your device.
+                        </p>
+                    </div>
+                </div>
+                <div class="landing-features col-md-3 row">
+                    <div class="col-md-2">
+                        <div class="circle">2</div>
+                    </div>
+                    <div class="col-md-10">
+                        <header class="header-ta-features">Initiate Scan</header>
+                        <p class="p-ta-features">
+                            Click the 'Scan' button to start scanning the URL or file for potential threats.
+                        </p>
+                    </div>
+                </div>
+                <div class="landing-features col-md-3 row">
+                    <div class="col-md-2">
+                        <div class="circle">3</div>
+                    </div>
+                    <div class="col-md-10">
+                        <header class="header-ta-features">View Results</header>
+                        <p class="p-ta-features">
+                            Once the scan is complete, view the detailed results to see if any threats were detected.
+                        </p>
+                    </div>
+                </div>
+                <div class="landing-features col-md-3 row">
+                    <div class="col-md-2">
+                        <div class="circle">4</div>
+                    </div>
+                    <div class="col-md-10">
+                        <header class="header-ta-features">Leave Comments</header>
+                        <p class="p-ta-features">
+                            Share your feedback on the scan results to help other users by leaving comments.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+      </div>
     </div>
 
     <!-- Result -->
