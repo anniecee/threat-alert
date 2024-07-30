@@ -1,17 +1,46 @@
-# THREAT ALERT
 
-### Iteration 1:
-- **Sign up**
-- **Login**
-- **Logout**
-- **Scan function** - Working on localhost but not on Render due to API's restrictions. Hence, the scan button is commented out. We are changing our API to make it work on Render for the next iterations.
+# ThreatAlert
 
-Please refer to the demo video in the submission for the scan URL feature.
+## Description
 
-### Iteration 2:
-- **Sign up**
-- **Login**
-- **Logout**
-- **Scan function** - changed to Link Preview API - ApyHub instead of VirusTotal API
-- **Personalized History**
-- **Test cases for all features**
+ThreatAlert is a collaborative web application dedicated to safeguarding the digital landscape. By harnessing the power of the VirusTotal API, we provide robust **URL and file scanning** capabilities to detect malicious threats. Our platform goes beyond simple detection, fostering a community where security enthusiasts can share insights, collaborate on investigations, and stay ahead of evolving threats.
+
+## Project Setup and Installation
+
+ -  **Clone the Repository**:
+     
+    - `git clone <repository-url>`
+    
+ -  **Set Up Database**:
+    
+    -   Create a database (on render.com).
+    -   Configure database connection in `src/main/resources/application.properties`.
+ -  **Run the Application**:
+    
+   
+	 -  `./mvnw spring-boot:run` 
+    
+- **Access the Application**:
+    
+    -   Open a web browser and navigate to `http://localhost:8080`.
+
+## Technologies Used
+
+-   Java Spring Framework
+-   Spring Boot
+-   Thymeleaf
+-   HTML/CSS
+-   JavaScript
+- PostgreSQL
+
+## Demo
+- Landing page
+![Landing page](https://i.imgur.com/8YI0l5w.png)
+- URL Scanning
+![URL Scanning](https://i.imgur.com/0wjbGf4.png)
+
+- File Scanning
+![File Scanning](https://i.imgur.com/JTFI0tl.png)
+
+- Scan History
+![Scan History](https://i.imgur.com/tpYraJi.png)
