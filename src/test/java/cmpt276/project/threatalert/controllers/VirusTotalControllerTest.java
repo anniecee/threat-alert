@@ -15,7 +15,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
-import java.util.Date;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;

@@ -17,7 +17,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import jakarta.servlet.http.HttpSession;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import static org.mockito.Mockito.*;
@@ -58,7 +57,7 @@ public class UserControllerTest {
     @Test
     public void testGetLoginAdminUserLoggedIn() throws Exception {
         // Tests the GET /user/login endpoint when an admin user is logged in
-        User adminUser = new User("admin@example.com", "password", "admin");
+        User adminUser = new User("Admin", "admin@example.com", "adminpassword", "admin");
         when(session.getAttribute("session_user")).thenReturn(adminUser);
 
         mockMvc.perform(get("/user/login").sessionAttr("session_user", adminUser))
@@ -93,7 +92,7 @@ public class UserControllerTest {
     @Test
     public void testLoginValidAdminCredentials() throws Exception {
         // Tests the POST /user/login endpoint with valid admin credentials
-        User adminUser = new User("admin", "admin@example.com", "password", "admin");
+        User adminUser = new User("Admin", "admin@example.com", "adminpassword", "admin");
         List<User> userList = new ArrayList<>();
         userList.add(adminUser);
         when(userRepository.findByEmailAndPassword("admin@example.com", "password")).thenReturn(userList);
@@ -259,29 +258,6 @@ public class UserControllerTest {
                 .andExpect(status().isNotFound())
                 .andExpect(content().string("User not found, delete unsuccessful"));
     }
-
-    // @Test
-    // public void testAddHistory() throws Exception {
-    // // Tests the POST /user/addhistory endpoint
-    // Date date = new Date();
-    // User user = new User("user", date, "user@example.com", "password");
-    // user.setUid(1);
-    // Website website = new Website();
-    // website.setWid(1);
-    // website.setLink("http://example.com");
-    // website.setThreatlevel("Clean");
-    // website.setDate(new Date());
-
-    // when(session.getAttribute("session_user")).thenReturn(user);
-    // when(userRepository.findByUid(1)).thenReturn(List.of(user));
-    // when(userRepository.save(user)).thenReturn(user);
-
-    // mockMvc.perform(post("/user/addhistory")
-    // .sessionAttr("session_user", user)
-    // .contentType("application/json")
-    // .content("{\"link\":\"http://example.com\", \"threatlevel\":\"Clean\"}"))
-    // .andExpect(status().isOk());
-    // }
 
     @Test
     public void testViewHistory() throws Exception {
