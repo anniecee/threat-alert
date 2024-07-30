@@ -44,6 +44,8 @@
                   <div class="redirects">
                       <a th:if="${user.type == 'admin'}" class="btn btn-header" href="/admin/userview">Admin Page<span class="sr-only"></span></a>
                       <a class="btn btn-header" href="/filescan">File Scan<span class="sr-only"></span></a>
+                      <a th:if="${user.type == 'admin'}" class="btn btn-header" href="/admin/userview">Admin Page<span class="sr-only"></span></a>
+                      <a class="btn btn-header" href="/filescan">File Scan<span class="sr-only"></span></a>
                       <a class="btn btn-header" href="/user/history">History<span class="sr-only"></span></a>
                       <a class="btn btn-header" href="/user/bookmarks">Bookmarks<span class="sr-only"></span></a>
                       <a class="btn btn-header" href="/user/profile">Profile<span class="sr-only"></span></a>
@@ -67,6 +69,7 @@
 
     <!-- Result -->
     <br><br><br>
+    <div class="container-fluid" style="width: 80%; margin: auto;" th:if="${result}" id="scanresult">
     <div class="container-fluid" style="width: 80%; margin: auto;" th:if="${result}" id="scanresult">
 
         <!-- if warning, style orange, otherwise green -->
