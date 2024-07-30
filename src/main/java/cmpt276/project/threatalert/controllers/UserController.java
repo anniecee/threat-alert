@@ -146,7 +146,7 @@ public class UserController {
             redirectAttributes.addFlashAttribute("signupSuccess", true);
             return "redirect:/home";
 
-        //if in there, redirect back to login saying already have an account
+        //if in there, inform user saying they already have an account
         } else {
 
             model.addAttribute("error", "Account Linked With Email Already Exists.");
