@@ -44,14 +44,23 @@ public class WebsiteController {
             return "redirect:/user/login";
         }
         
-        // user = userRepo.findByUid(user.getUid()).get(0);
         model.addAttribute("user", user);
 
         return "scan/urlscan";
     }
 
     @GetMapping("/filescan")
-    public String fscan() {
+    public String fscan(Model model, HttpSession session) {
+
+        System.out.println("viewing filescan page");
+
+        User user = (User) session.getAttribute("session_user");
+        if (user == null) {
+            return "redirect:/user/login";
+        }
+        
+        model.addAttribute("user", user);
+
         return "scan/filescan";
     }
     
