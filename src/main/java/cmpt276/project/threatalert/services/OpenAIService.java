@@ -56,23 +56,23 @@ public class OpenAIService {
         JsonObject jsonResponse = JsonParser.parseString(response.body()).getAsJsonObject();
 
         JsonArray choices = jsonResponse.getAsJsonArray("choices");
-if (choices != null && choices.size() > 0) {
-    JsonObject choice = choices.get(0).getAsJsonObject();
-    JsonObject messageObject = choice.getAsJsonObject("message");
-    if (messageObject != null && messageObject.has("content")) {
-        String content = messageObject.get("content").getAsString();
-        String rawText = content.replaceAll("\\n", " ")
-                                .replaceAll("\\r", " ")
-                                .replaceAll("\\*\\*", "")
-                                .replaceAll("\\*\\*", "")
-                                .replaceAll("#", "")
-                                .trim();
+        if (choices != null && choices.size() > 0) {
+            JsonObject choice = choices.get(0).getAsJsonObject();
+            JsonObject messageObject = choice.getAsJsonObject("message");
+            if (messageObject != null && messageObject.has("content")) {
+                String content = messageObject.get("content").getAsString();
+                String rawText = content.replaceAll("\\n", " ")
+                                        .replaceAll("\\r", " ")
+                                        .replaceAll("\\*\\*", "")
+                                        .replaceAll("\\*\\*", "")
+                                        .replaceAll("#", "")
+                                        .trim();
 
-        // logger.info("Content field: " + content);
-        // logger.info("Raw text: " + rawText);
-        return rawText;
-    }
-}
+                // logger.info("Content field: " + content);
+                // logger.info("Raw text: " + rawText);
+                return rawText;
+            }
+        }
 
         logger.warning("Unexpected JSON structure in OpenAI API response: " + jsonResponse);
         return "No summary available";
@@ -113,23 +113,23 @@ if (choices != null && choices.size() > 0) {
         JsonObject jsonResponse = JsonParser.parseString(response.body()).getAsJsonObject();
 
         JsonArray choices = jsonResponse.getAsJsonArray("choices");
-if (choices != null && choices.size() > 0) {
-    JsonObject choice = choices.get(0).getAsJsonObject();
-    JsonObject messageObject = choice.getAsJsonObject("message");
-    if (messageObject != null && messageObject.has("content")) {
-        String content = messageObject.get("content").getAsString();
-        String rawText = content.replaceAll("\\n", " ")
-                                .replaceAll("\\r", " ")
-                                .replaceAll("\\*\\*", "")
-                                .replaceAll("\\*\\*", "")
-                                .replaceAll("#", "")
-                                .trim();
+        if (choices != null && choices.size() > 0) {
+            JsonObject choice = choices.get(0).getAsJsonObject();
+            JsonObject messageObject = choice.getAsJsonObject("message");
+            if (messageObject != null && messageObject.has("content")) {
+                String content = messageObject.get("content").getAsString();
+                String rawText = content.replaceAll("\\n", " ")
+                                        .replaceAll("\\r", " ")
+                                        .replaceAll("\\*\\*", "")
+                                        .replaceAll("\\*\\*", "")
+                                        .replaceAll("#", "")
+                                        .trim();
 
-        // logger.info("Content field: " + content);
-        // logger.info("Raw text: " + rawText);
-        return rawText;
-    }
-}
+                // logger.info("Content field: " + content);
+                // logger.info("Raw text: " + rawText);
+                return rawText;
+            }
+        }
 
         logger.warning("Unexpected JSON structure in OpenAI API response: " + jsonResponse);
         return "No summary available";
