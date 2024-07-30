@@ -1,82 +1,140 @@
 package cmpt276.project.threatalert.models;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class UserTest {
 
+    private User user;
+    private Date date;
+
+    @BeforeEach
+    public void setUp() {
+        date = new Date();
+        user = new User("Test User", "test@example.com", "password");
+    }
+
     @Test
     public void testDefaultConstructor() {
-        // Tests the default constructor of the User class
-        User user = new User();
-        assertNull(user.getEmail());
-        assertNull(user.getPassword());
-        assertNull(user.getType());
-        assertEquals(0, user.getUid());
+        User defaultUser = new User();
+        assertNull(defaultUser.getName());
+        assertNull(defaultUser.getDate());
+        assertNull(defaultUser.getEmail());
+        assertNull(defaultUser.getPassword());
+        assertNull(defaultUser.getType());
+        assertNull(defaultUser.getScans());
     }
 
     @Test
-    public void testConstructorForRegularUser() {
-        // Tests the constructor for a regular user
-        String name = "test";
-        String email = "test@example.com";
-        String password = "password123";
-        Date date = new Date();
-        User user = new User(name, date, email, password);
-        
-        assertEquals(email, user.getEmail());
-        assertEquals(password, user.getPassword());
+    public void testParameterizedConstructor() {
+        User user = new User("Test User", "test@example.com", "password");
+        assertEquals("Test User", user.getName());
+        assertNotNull(user.getDate());
+        assertEquals("test@example.com", user.getEmail());
+        assertEquals("password", user.getPassword());
         assertEquals("regular", user.getType());
+        assertNotNull(user.getScans());
     }
 
     @Test
-    public void testConstructorForNonRegularUser() {
-        // Tests the constructor for a non-regular user (e.g., admin)
-        String email = "admin@example.com";
-        String password = "admin123";
-        String type = "admin";
-        User user = new User(email, password, type);
-        
-        assertEquals(email, user.getEmail());
-        assertEquals(password, user.getPassword());
-        assertEquals(type, user.getType());
+    public void testAdminConstructor() {
+        User adminUser = new User("Admin", "admin@example.com", "adminpassword", "admin");
+        assertEquals("Admin", adminUser.getName());
+        assertEquals(date, adminUser.getDate());
+        assertEquals("admin@example.com", adminUser.getEmail());
+        assertEquals("adminpassword", adminUser.getPassword());
+        assertEquals("admin", adminUser.getType());
+        assertNotNull(adminUser.getScans());
     }
 
     @Test
-    public void testSetAndGetUid() {
-        // Tests the setter and getter for the uid field
-        User user = new User();
-        int uid = 1;
-        user.setUid(uid);
-        assertEquals(uid, user.getUid());
+    public void testGetAndSetUid() {
+        user.setUid(1);
+        assertEquals(1, user.getUid());
     }
 
     @Test
-    public void testSetAndGetEmail() {
-        // Tests the setter and getter for the email field
-        User user = new User();
-        String email = "test@example.com";
-        user.setEmail(email);
-        assertEquals(email, user.getEmail());
+    public void testGetAndSetEmail() {
+        user.setEmail("newemail@example.com");
+        assertEquals("newemail@example.com", user.getEmail());
     }
 
     @Test
-    public void testSetAndGetPassword() {
-        // Tests the setter and getter for the password field
-        User user = new User();
-        String password = "password123";
-        user.setPassword(password);
-        assertEquals(password, user.getPassword());
+    public void testGetAndSetPassword() {
+        user.setPassword("newpassword");
+        assertEquals("newpassword", user.getPassword());
     }
 
     @Test
-    public void testSetAndGetType() {
-        // Tests the setter and getter for the type field
-        User user = new User();
-        String type = "admin";
-        user.setType(type);
-        assertEquals(type, user.getType());
+    public void testGetAndSetType() {
+        user.setType("admin");
+        assertEquals("admin", user.getType());
+    }
+
+    @Test
+    public void testGetAndSetName() {
+        user.setName("New Name");
+        assertEquals("New Name", user.getName());
+    }
+
+    @Test
+    public void testGetAndSetDate() {
+        Date newDate = new Date();
+        user.setDate(newDate);
+        assertEquals(newDate, user.getDate());
+    }
+
+    @Test
+    public void testGetAndSetScans() {
+        Scan scan = new Scan();
+        user.setScans(List.of(scan));
+        assertNotNull(user.getScans());
+        assertEquals(1, user.getScans().size());
+        assertEquals(scan, user.getScans().get(0));
+    }
+
+    @Test
+    public void testAddScan() {
+        Scan scan = new Scan();
+        user.addScan(scan);
+        assertNotNull(user.getScans());
+        assertEquals(1, user.getScans().size());
+        assertEquals(scan, user.getScans().get(0));
+    }
+
+    @Test
+    public void testRemoveScan() {
+        Scan scan = new Scan();
+        user.addScan(scan);
+        assertEquals(1, user.getScans().size());
+        user.removeScan(scan);
+        assertEquals(0, user.getScans().size());
+    }
+
+    @Test
+    public void addAndRemoveMultipleScans() {
+        // Test addScan and removeScan multiple times
+        int qty = 5;
+        List<Scan> scans = new ArrayList<>();
+        for (int i = 0; i < qty; i++) {
+            Scan scan = new Scan();
+            scan.setSid(i);
+            scans.add(scan);
+            user.addScan(scan);
+
+            assertEquals(i, user.getScans().get(i).getSid());
+        }
+
+        for (int i = 0; i < qty; i++) {
+            user.removeScan(scans.get(0));
+            scans.remove(0);
+            assertEquals(--qty, user.getScans().size());
+        }
     }
 }

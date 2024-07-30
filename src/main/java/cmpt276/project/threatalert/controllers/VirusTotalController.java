@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -24,6 +25,7 @@ import cmpt276.project.threatalert.models.UserRepository;
 import cmpt276.project.threatalert.models.Website;
 import cmpt276.project.threatalert.models.WebsiteRepository;
 import cmpt276.project.threatalert.services.VirusTotalService;
+import cmpt276.project.threatalert.services.OpenAIService;
 import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
@@ -35,6 +37,9 @@ public class VirusTotalController {
 
     @Autowired
     private VirusTotalService virusTotalService;
+
+    @Autowired
+    private OpenAIService openAIService;
 
     @Autowired
     private WebsiteRepository websiteRepo;
@@ -62,13 +67,12 @@ public class VirusTotalController {
             }
             User user = optionalUser.get();
             logger.info("User found: id = {}, email = {}", user.getUid(), user.getEmail());
+            model.addAttribute("user", user);
             
             String result = virusTotalService.scanUrl(url);
 
             List<Website> websites = websiteRepo.findByLink(url);
             Website website;
-            System.out.println("user id " + user.getUid());
-            System.out.println("user email " + user.getEmail());
             if (websites.isEmpty()) {
                 logger.info("\nwebsite not in repo");
                 // Verify the scan result
@@ -80,12 +84,10 @@ public class VirusTotalController {
                 }
                 //helper function below
                 website = createWebsite(url, result);
-                
             }
             else {
                 logger.info("\nwebsite in repo");
                 website = websites.get(0);
-                // website = createWebsite(url, result);
             }
             
             Scan scan = new Scan(website);
@@ -95,20 +97,9 @@ public class VirusTotalController {
 
             model.addAttribute("comments", commentList);
             websiteRepo.save(website);
-
-            logger.info("saved to web repo");
-
-            //verify scan object
-            System.out.println("verifying scan");
-            System.out.println("url " + scan.getWebsite().getLink());
-            System.out.println("scan date " + scan.getScanDate());
-
             user.addScan(scan);
-            logger.info("added scan to user");
             scan.setUser(user);
-            logger.info("set user of scan");
             scanRepo.save(scan);
-            logger.info("saved to scan repo");
             userRepo.save(user);
             logger.info("saved to user repo");
 
@@ -134,6 +125,39 @@ public class VirusTotalController {
         return "scan/urlscan";
     }
 
+    @PostMapping("/filescan")
+    public String handleFileUpload(@RequestParam("file") MultipartFile file, Model model, HttpSession session) {
+
+        logger.info("Received file for scanning: {}", file);
+        try {
+
+            User sessionUser = (User) session.getAttribute("session_user");
+            if (sessionUser == null) {
+                return "redirect:/user/login";
+            }
+            // Fetch the user from the repository to ensure it's persisted
+            Optional<User> optionalUser = userRepo.findById(sessionUser.getUid());
+            if (!optionalUser.isPresent()) {
+                model.addAttribute("error", "User not found. Please log in again.");
+                return "redirect:/user/login";
+            }
+            User user = optionalUser.get();
+            logger.info("User found: id = {}, email = {}", user.getUid(), user.getEmail());
+            model.addAttribute("user", user);
+
+            String fileResult = virusTotalService.scanFile(file);
+            displayFileResult(fileResult, model);
+            model.addAttribute("result", fileResult);
+
+        } catch (IOException | InterruptedException e) {
+            logger.error("Error scanning file: {}", e.getMessage(), e);
+            model.addAttribute("result", "Error: " + e.getMessage());
+        }
+
+        return "scan/filescan";
+
+    }
+
     private Website createWebsite(String url, String result) {
         //result is the json string
         JsonObject jsonObject = JsonParser.parseString(result).getAsJsonObject();
@@ -148,7 +172,54 @@ public class VirusTotalController {
         return website;
     }
 
+    private void displayFileResult(String scanResultString, Model model) {
+        // Create JsonObject from scan result string
+        JsonObject result = JsonParser.parseString(scanResultString).getAsJsonObject();
+    
+        // Get file info
+        JsonObject fileInfo = result.getAsJsonObject("meta").getAsJsonObject("file_info");
+        String sha256 = fileInfo.getAsJsonPrimitive("sha256").getAsString();
+        String md5 = fileInfo.getAsJsonPrimitive("md5").getAsString();
+        String sha1 = fileInfo.getAsJsonPrimitive("sha1").getAsString();
+        long size = fileInfo.getAsJsonPrimitive("size").getAsLong();
+    
+        // Get scan status and stats
+        JsonObject attributes = result.getAsJsonObject("data").getAsJsonObject("attributes");
+        String status = attributes.getAsJsonPrimitive("status").getAsString();
+        JsonObject stats = attributes.getAsJsonObject("stats");
+        int malicious = stats.getAsJsonPrimitive("malicious").getAsInt();
+        int suspicious = stats.getAsJsonPrimitive("suspicious").getAsInt();
+        int undetected = stats.getAsJsonPrimitive("undetected").getAsInt();
+        int harmless = stats.getAsJsonPrimitive("harmless").getAsInt();
+        int timeout = stats.getAsJsonPrimitive("timeout").getAsInt();
+    
+        // Add file info to model
+        model.addAttribute("sha256", sha256);
+        model.addAttribute("md5", md5);
+        model.addAttribute("sha1", sha1);
+        model.addAttribute("size", size);
+    
+        // Add scan status and stats to model
+        model.addAttribute("status", status);
+        model.addAttribute("malicious", malicious);
+        model.addAttribute("suspicious", suspicious);
+        model.addAttribute("undetected", undetected);
+        model.addAttribute("harmless", harmless);
+        model.addAttribute("timeout", timeout);
+    
+        // Generate the summary from OpenAIService
+        try {
+            String summary = openAIService.summarizeFile(scanResultString);
+            model.addAttribute("summary", summary);
+        } catch (IOException | InterruptedException e) {
+            logger.error("Error summarizing scan result: {}", e.getMessage(), e);
+            model.addAttribute("summary", "Error summarizing scan result.");
+        }
+    }
+    
+
     private void displayResult(String scanResultString, Model model) {
+        
         // Create JsonObject from scan result string
         JsonObject result = JsonParser.parseString(scanResultString).getAsJsonObject();
         
@@ -173,6 +244,15 @@ public class VirusTotalController {
             vendorResults.add(entryMap);
         }
         model.addAttribute("vendorResults", vendorResults);
+
+        // Generate the summary from OpenAIService
+        try {
+            String summary = openAIService.summarizeURL(scanResultString);
+            model.addAttribute("summary", summary);
+        } catch (IOException | InterruptedException e) {
+            logger.error("Error summarizing scan result: {}", e.getMessage(), e);
+            model.addAttribute("summary", "Error summarizing scan result.");
+        }
     }
 
         // Method to sort comments by date in descending order

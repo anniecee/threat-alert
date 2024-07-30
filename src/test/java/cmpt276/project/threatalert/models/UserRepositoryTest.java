@@ -2,76 +2,112 @@ package cmpt276.project.threatalert.models;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 public class UserRepositoryTest {
 
     @Mock
     private UserRepository userRepository;
 
-    @InjectMocks
-    private UserRepositoryTest userRepositoryTest;
+    private User user;
 
     @BeforeEach
     public void setUp() {
-        // Initializes mock objects before each test
-        MockitoAnnotations.openMocks(this);
+        user = new User();
+        user.setUid(1);
+        user.setEmail("test@example.com");
+        user.setPassword("password123");
     }
 
+    // Test finding a User by email and password
     @Test
     public void testFindByEmailAndPassword() {
-        // Tests the findByEmailAndPassword method of the UserRepository
-        String email = "testuser@example.com";
-        String password = "password123";
-        User user = new User();
-        user.setEmail(email);
-        user.setPassword(password);
+        when(userRepository.findByEmailAndPassword("test@example.com", "password123")).thenReturn(List.of(user));
 
-        when(userRepository.findByEmailAndPassword(email, password)).thenReturn(List.of(user));
+        List<User> foundUsers = userRepository.findByEmailAndPassword("test@example.com", "password123");
 
-        List<User> foundUsers = userRepository.findByEmailAndPassword(email, password);
-
+        assertFalse(foundUsers.isEmpty());
         assertEquals(1, foundUsers.size());
-        assertEquals(email, foundUsers.get(0).getEmail());
-        assertEquals(password, foundUsers.get(0).getPassword());
+        assertEquals(user.getUid(), foundUsers.get(0).getUid());
+        assertEquals(user.getEmail(), foundUsers.get(0).getEmail());
+        assertEquals(user.getPassword(), foundUsers.get(0).getPassword());
+
+        verify(userRepository, times(1)).findByEmailAndPassword("test@example.com", "password123");
     }
 
+    // Tests the findByEmailAndPassword method of the UserRepository
+    // Test when combination not found
+    @Test
+    public void testFindByEmailAndPasswordNoMatch() {
+
+        when(userRepository.findByEmailAndPassword("test@example.com", "randompass")).thenReturn(List.of());
+
+        List<User> foundUsers = userRepository.findByEmailAndPassword("test@example.com", "randompass");
+
+        assertTrue(foundUsers.isEmpty());
+        verify(userRepository, times(1)).findByEmailAndPassword("test@example.com", "randompass");
+        
+    }
+
+    // Tests the findByEmail method of the UserRepository
     @Test
     public void testFindByEmail() {
-        // Tests the findByEmail method of the UserRepository
-        String email = "testuser@example.com";
-        User user = new User();
-        user.setEmail(email);
 
-        when(userRepository.findByEmail(email)).thenReturn(List.of(user));
+        when(userRepository.findByEmail("test@example.com")).thenReturn(List.of(user));
 
-        List<User> foundUsers = userRepository.findByEmail(email);
+        List<User> foundUsers = userRepository.findByEmail("test@example.com");
 
+        assertFalse(foundUsers.isEmpty());
         assertEquals(1, foundUsers.size());
-        assertEquals(email, foundUsers.get(0).getEmail());
+        assertEquals(user.getUid(), foundUsers.get(0).getUid());
+        assertEquals(user.getEmail(), foundUsers.get(0).getEmail());
+
+        verify(userRepository, times(1)).findByEmail("test@example.com");
     }
 
+    // Test finding a User by UID
     @Test
     public void testFindByUid() {
-        // Tests the findByUid method of the UserRepository
-        int uid = 1;
-        User user = new User();
-        user.setUid(uid);
+        when(userRepository.findByUid(1)).thenReturn(List.of(user));
 
-        when(userRepository.findByUid(uid)).thenReturn(List.of(user));
+        List<User> foundUsers = userRepository.findByUid(1);
 
-        List<User> foundUsers = userRepository.findByUid(uid);
-
+        assertFalse(foundUsers.isEmpty());
         assertEquals(1, foundUsers.size());
-        assertEquals(uid, foundUsers.get(0).getUid());
+        assertEquals(user.getUid(), foundUsers.get(0).getUid());
+
+        verify(userRepository, times(1)).findByUid(1);
+    }
+
+    // Test finding a User by a non-existent email
+    @Test
+    public void testFindByNonExistentEmail() {
+        when(userRepository.findByEmail("nonexistent@example.com")).thenReturn(List.of());
+
+        List<User> foundUsers = userRepository.findByEmail("nonexistent@example.com");
+
+        assertTrue(foundUsers.isEmpty());
+
+        verify(userRepository, times(1)).findByEmail("nonexistent@example.com"); 
+    }
+
+    // Test finding a User by a non-existent UID
+    @Test
+    public void testFindByNonExistentUid() {
+        when(userRepository.findByUid(999)).thenReturn(List.of());
+
+        List<User> foundUsers = userRepository.findByUid(999);
+
+        assertTrue(foundUsers.isEmpty());
+
+        verify(userRepository, times(1)).findByUid(999);
     }
 }
