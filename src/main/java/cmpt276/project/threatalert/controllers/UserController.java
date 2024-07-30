@@ -138,8 +138,8 @@ public class UserController {
         //if not in there
         if (userList.isEmpty()) { //add to database and redirect to home page
             
-            Date date = new Date();
-            User user = new User(name, date, email, confirmedPassword);            userRepo.save(user);
+            User user = new User(name, email, confirmedPassword);            
+            userRepo.save(user);
             request.getSession().setAttribute("session_user", user);
             response.setStatus(HttpServletResponse.SC_CREATED);
 
