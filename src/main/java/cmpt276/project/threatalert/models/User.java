@@ -25,13 +25,8 @@ public class User {
     private String type; // "regular" for regular user, "admin" for admin user
 
     @OneToMany(mappedBy = "user")
-    private List<Website> history;
-
-    @OneToMany(mappedBy = "user")
     private List<Comment> comments;
 
-    @OneToMany(mappedBy = "user")
-    private List<Website> bookmarks;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Scan> scans;
 

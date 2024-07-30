@@ -21,12 +21,6 @@ public class Comment {
     public Comment() {
     }
 
-    public Comment(User user, String content, Date date) {
-        this.content = content;
-        this.date = date;
-        this.user = user;
-    }
-
 
     public Comment(User user, String content, Date date, Website website) {
         this.content = content;

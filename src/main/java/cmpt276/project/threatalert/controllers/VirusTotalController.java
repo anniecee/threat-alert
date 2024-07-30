@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.autoconfigure.metrics.MetricsProperties.Web;
+import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,6 +16,7 @@ import com.google.gson.JsonParser;
 
 import java.util.*;
 
+import cmpt276.project.threatalert.models.Comment;
 import cmpt276.project.threatalert.models.Scan;
 import cmpt276.project.threatalert.models.ScanRepository;
 import cmpt276.project.threatalert.models.User;
@@ -87,7 +89,13 @@ public class VirusTotalController {
             }
             
             Scan scan = new Scan(website);
+
+            List<Comment> commentList = website.getComments();
+            sortByCommentDate(commentList);
+
+            model.addAttribute("comments", commentList);
             websiteRepo.save(website);
+
             logger.info("saved to web repo");
 
             //verify scan object
@@ -108,9 +116,15 @@ public class VirusTotalController {
 
             model.addAttribute("website", website);
 
+            model.addAttribute("user", user);
+
+
+
             // Display scan result
             displayResult(result, model);
             model.addAttribute("result", true);
+
+            
 
         } catch (IOException | InterruptedException e) {
             logger.error("Error scanning URL: {}", e.getMessage(), e);
@@ -161,4 +175,14 @@ public class VirusTotalController {
         model.addAttribute("vendorResults", vendorResults);
     }
 
+        // Method to sort comments by date in descending order
+        private void sortByCommentDate(List<Comment> comments) {
+            Collections.sort(comments, new Comparator<Comment>() {
+                @Override
+                public int compare(Comment c1, Comment c2) {
+                    return c2.getDate().compareTo(c1.getDate()); // Descending order
+                }
+            });
+
+    }
 }
