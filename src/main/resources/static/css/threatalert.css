@@ -180,7 +180,15 @@ th.id {
     width: 50px;
 }
 
-th.email, th.password, th.type {
+th.name, th.type {
+    min-width: 100px;
+}
+
+th.password {
+    min-width: 125px;
+}
+
+th.email {
     min-width: 200px;
 }
 
@@ -194,6 +202,10 @@ th.threat-level, th.threat-details {
 
 th.date {
     min-width: 200px;
+}
+
+th.options {
+    min-width: 130px;
 }
 
 .table-inner {

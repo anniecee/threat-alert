@@ -3,7 +3,6 @@ package cmpt276.project.threatalert.models;
 import java.util.*;
 
 import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -29,17 +28,17 @@ public class User {
 
     public User() {}
 
-    public User(String name, Date date, String email, String password) {
+    public User(String name, String email, String password) {
         this.name = name;
-        this.date = date;
+        this.date = new Date();
         this.email = email;
         this.password = password;
         this.type = "regular";
         this.scans = new ArrayList<>();
     }
 
-    public User(String email, String password, String type) {
-        this.name = "Admin";
+    public User(String name, String email, String password, String type) {
+        this.name = name;
         this.date = new Date();
         this.email = email;
         this.password = password;
