@@ -179,7 +179,7 @@ public class VirusTotalController {
     
         // Generate the summary from OpenAIService
         try {
-            String summary = openAIService.summarize(scanResultString);
+            String summary = openAIService.summarizeFile(scanResultString);
             model.addAttribute("summary", summary);
         } catch (IOException | InterruptedException e) {
             logger.error("Error summarizing scan result: {}", e.getMessage(), e);
@@ -217,7 +217,7 @@ public class VirusTotalController {
 
         // Generate the summary from OpenAIService
         try {
-            String summary = openAIService.summarize(scanResultString);
+            String summary = openAIService.summarizeURL(scanResultString);
             model.addAttribute("summary", summary);
         } catch (IOException | InterruptedException e) {
             logger.error("Error summarizing scan result: {}", e.getMessage(), e);
