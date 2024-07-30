@@ -43,30 +43,24 @@ public class UserRepositoryTest {
         verify(userRepository, times(1)).findByEmailAndPassword("test@example.com", "password123");
     }
 
-    // Test finding a User by email
+    // Tests the findByEmailAndPassword method of the UserRepository
+    // Test when combination not found
     @Test
-    public void testFindByEmailAndPasswordFail() {
-        // Tests the findByEmailAndPassword method of the UserRepository
-        // Test when combination not found
-        String name = "joe";
-        String email = "testuser@example.com";
-        String password = "password123";
-        User user = new User(name, email, password);
+    public void testFindByEmailAndPasswordNoMatch() {
 
-        when(userRepository.findByEmailAndPassword("random@gmail.com", password)).thenReturn(List.of(user));
+        when(userRepository.findByEmailAndPassword("test@example.com", "randompass")).thenReturn(List.of());
 
-        List<User> foundUsers = userRepository.findByEmailAndPassword("random@gmail.com", password);
+        List<User> foundUsers = userRepository.findByEmailAndPassword("test@example.com", "randompass");
 
-        assertEquals(0, foundUsers.size());
+        assertTrue(foundUsers.isEmpty());
+        verify(userRepository, times(1)).findByEmailAndPassword("test@example.com", "randompass");
+        
     }
 
+    // Tests the findByEmail method of the UserRepository
     @Test
     public void testFindByEmail() {
-        // Tests the findByEmail method of the UserRepository
-        String name = "joe";
-        String email = "testuser@example.com";
-        String password = "password123";
-        User user = new User(name, email, password);
+
         when(userRepository.findByEmail("test@example.com")).thenReturn(List.of(user));
 
         List<User> foundUsers = userRepository.findByEmail("test@example.com");
