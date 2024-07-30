@@ -93,7 +93,7 @@ public class UserControllerTest {
     @Test
     public void testLoginValidAdminCredentials() throws Exception {
         // Tests the POST /user/login endpoint with valid admin credentials
-        User adminUser = new User("admin@example.com", "password", "admin");
+        User adminUser = new User("admin", "admin@example.com", "password", "admin");
         List<User> userList = new ArrayList<>();
         userList.add(adminUser);
         when(userRepository.findByEmailAndPassword("admin@example.com", "password")).thenReturn(userList);
@@ -137,6 +137,18 @@ public class UserControllerTest {
     }
 
     @Test
+    public void testSignupPasswordWeak() throws Exception {
+        // Tests the POST /user/signup endpoint when password is too weak
+        mockMvc.perform(post("/user/signup")
+                .param("email", "user@example.com")
+                .param("password", "password")
+                .param("passwordConfirm", "password"))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("error"))
+                .andExpect(view().name("user/signup"));
+    }
+
+    @Test
     public void testSignupPasswordsDoNotMatch() throws Exception {
         // Tests the POST /user/signup endpoint when passwords do not match
         mockMvc.perform(post("/user/signup")
@@ -175,13 +187,13 @@ public class UserControllerTest {
                 .param("password", "password!@#")
                 .param("passwordConfirm", "password!@#"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/user/login"));
+                .andExpect(redirectedUrl("/home"));
     }
 
     @Test
     public void testShowUsersAdmin() throws Exception {
         // Tests the GET /admin/userview endpoint for an admin user
-        User adminUser = new User("admin@example.com", "password", "admin");
+        User adminUser = new User("admin", "admin@example.com", "password", "admin");
         List<User> userList = new ArrayList<>();
         userList.add(new User("user", "user1@example.com", "password"));
         userList.add(new User("user", "user2@example.com", "password"));
@@ -207,11 +219,45 @@ public class UserControllerTest {
 
     @Test
     public void testDeleteUser() throws Exception {
-        // Tests the POST /user/delete endpoint
-        mockMvc.perform(post("/user/delete")
-                .param("uid", "1"))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/admin/userview"));
+        // Tests the DELETE /user/delete endpoint to delete a user from the repository
+        // Expect status to be 410 Gone
+        User user1 = new User("user", "user@example.com", "password");
+        User user2 = new User("user", "user@example.com", "password");
+
+        List<User> userList = new ArrayList<>();
+        userList.add(user1);
+        userList.add(user2);
+        when(userRepository.findAll()).thenReturn(userList);
+        when(userRepository.findByUid(1)).thenReturn(List.of(user1));
+        when(userRepository.findByUid(2)).thenReturn(List.of(user2));
+
+        mockMvc.perform(delete("/user/delete")
+                .content("1")) //look for uid = 1
+                .andExpect(status().isGone())
+                .andExpect(content().string("User successfully deleted"));
+
+        mockMvc.perform(delete("/user/delete")
+                .content("2")) //look for uid = 2
+                .andExpect(status().isGone())
+                .andExpect(content().string("User successfully deleted"));
+    }
+
+    @Test
+    public void testDeleteUserFail() throws Exception {
+        // Tests the DELETE /user/delete endpoint to delete a user from the repository
+        // Expect status to be 410 Gone
+        User user = new User("user", "user@example.com", "password");
+
+        List<User> userList = new ArrayList<>();
+        userList.add(user);
+
+        when(userRepository.findAll()).thenReturn(userList);
+        when(userRepository.findByUid(1)).thenReturn(List.of(user));
+
+        mockMvc.perform(delete("/user/delete")
+                .content("100")) //look for uid = 100
+                .andExpect(status().isNotFound())
+                .andExpect(content().string("User not found, delete unsuccessful"));
     }
 
     // @Test
@@ -279,9 +325,36 @@ public class UserControllerTest {
         mockMvc.perform(delete("/user/deletefromhistory")
                 .contentType("application/json")
                 .content(String.valueOf(sid)))
-                .andExpect(status().isGone());
+                .andExpect(status().isGone())
+                .andExpect(content().string("Received " + sid + " and deleted"));
 
         verify(scanRepository, times(1)).delete(scan);
+    }
+
+    @Test
+    public void testDeleteWebsiteNotFound() throws Exception {
+        // Test to verify the behavior of deleting a scan from user history.
+        // Attempting to delete a non-existing scan from the repo, and return status 404 Not Found
+        int sid = 1;
+        User user = new User("user", "user@example.com", "password");
+        user.setUid(1);
+
+        Website website = new Website("http://example.com", "Clean");
+        Scan scan = new Scan(website);
+        scan.setSid(sid);
+        scan.setUser(user);
+        List<Scan> scans = new ArrayList<>();
+        scans.add(scan);
+
+        when(scanRepository.findBySid(sid)).thenReturn(scans);
+
+        mockMvc.perform(delete("/user/deletefromhistory")
+                .contentType("application/json")
+                .content("100")) //sid = 100
+                .andExpect(status().isNotFound())
+                .andExpect(content().string("Received 100 but unable to delete"));
+
+        verify(scanRepository, times(0)).delete(scan);
     }
 
     @Test
@@ -322,7 +395,8 @@ public class UserControllerTest {
         mockMvc.perform(put("/user/addbookmark")
                 .contentType("application/json")
                 .content(String.valueOf(sid)))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(content().string("Item successfully bookmarked"));
 
         verify(scanRepository, times(1)).save(scan);
     }
@@ -342,9 +416,82 @@ public class UserControllerTest {
         mockMvc.perform(delete("/user/removebookmark")
                 .contentType("application/json")
                 .content(String.valueOf(sid)))
-                .andExpect(status().isAccepted());
+                .andExpect(status().isAccepted())
+                .andExpect(content().string("Removed from bookmarks"));
 
         verify(scanRepository, times(1)).save(scan);
+    }
+
+    @Test
+    public void testDeleteBookmarkedWebsite() throws Exception {
+        // Test to verify the behavior of deleting a scan from user history.
+        // Attempting to delete a bookmarked scan. Will set toDelete attribute as true, but will not delete from repo yet. Should return status 202 Accepted. 
+        int sid = 1;
+        User user = new User("user", "user@example.com", "password");
+        user.setUid(1);
+
+        Website website = new Website("http://example.com", "Clean");
+        Scan scan = new Scan(website);
+        scan.setSid(sid);
+        scan.setUser(user);
+        List<Scan> scans = new ArrayList<>();
+        scans.add(scan);
+
+        when(scanRepository.findBySid(sid)).thenReturn(scans);
+
+        mockMvc.perform(put("/user/addbookmark")
+                .contentType("application/json")
+                .content(String.valueOf(sid)))
+                .andExpect(status().isOk())
+                .andExpect(content().string("Item successfully bookmarked"));
+
+        mockMvc.perform(delete("/user/deletefromhistory")
+                .contentType("application/json")
+                .content(String.valueOf(sid)))
+                .andExpect(status().isAccepted())
+                .andExpect(content().string("Removed from history, but still bookmarked"));
+
+        verify(scanRepository, times(0)).delete(scan);
+        verify(scanRepository, times(2)).save(scan);
+    }
+
+    @Test
+    public void testRemoveBookmarkOnToDelete() throws Exception {
+        // Test to verify the behavior of removing a bookmark from a scan that has been removed from history.
+        // Sets bookmark status as false, and gets deleted from repo since it has also been removed from history.
+        // Should return status 410 Gone.
+        User user = new User("user", "user@example.com", "password");
+        user.setUid(1);
+
+        int sid = 1;
+        Scan scan = new Scan();
+        scan.setSid(sid);
+        scan.setUser(user);
+        List<Scan> scans = new ArrayList<>();
+        scans.add(scan);
+
+        when(scanRepository.findBySid(sid)).thenReturn(scans);
+
+        mockMvc.perform(put("/user/addbookmark")
+                .contentType("application/json")
+                .content(String.valueOf(sid)))
+                .andExpect(status().isOk())
+                .andExpect(content().string("Item successfully bookmarked"));
+
+        mockMvc.perform(delete("/user/deletefromhistory")
+                .contentType("application/json")
+                .content(String.valueOf(sid)))
+                .andExpect(status().isAccepted())
+                .andExpect(content().string("Removed from history, but still bookmarked"));
+
+        mockMvc.perform(delete("/user/removebookmark")
+                .contentType("application/json")
+                .content(String.valueOf(sid)))
+                .andExpect(status().isGone())
+                .andExpect(content().string("Removed from database"));
+
+        verify(scanRepository, times(2)).save(scan);
+        verify(scanRepository, times(1)).delete(scan);
     }
 
     @Test

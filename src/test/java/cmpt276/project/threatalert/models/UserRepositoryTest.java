@@ -30,11 +30,10 @@ public class UserRepositoryTest {
     @Test
     public void testFindByEmailAndPassword() {
         // Tests the findByEmailAndPassword method of the UserRepository
+        String name = "joe";
         String email = "testuser@example.com";
         String password = "password123";
-        User user = new User();
-        user.setEmail(email);
-        user.setPassword(password);
+        User user = new User(name, email, password);
 
         when(userRepository.findByEmailAndPassword(email, password)).thenReturn(List.of(user));
 
@@ -46,11 +45,28 @@ public class UserRepositoryTest {
     }
 
     @Test
+    public void testFindByEmailAndPasswordFail() {
+        // Tests the findByEmailAndPassword method of the UserRepository
+        // Test when combination not found
+        String name = "joe";
+        String email = "testuser@example.com";
+        String password = "password123";
+        User user = new User(name, email, password);
+
+        when(userRepository.findByEmailAndPassword("random@gmail.com", password)).thenReturn(List.of(user));
+
+        List<User> foundUsers = userRepository.findByEmailAndPassword("random@gmail.com", password);
+
+        assertEquals(0, foundUsers.size());
+    }
+
+    @Test
     public void testFindByEmail() {
         // Tests the findByEmail method of the UserRepository
+        String name = "joe";
         String email = "testuser@example.com";
-        User user = new User();
-        user.setEmail(email);
+        String password = "password123";
+        User user = new User(name, email, password);
 
         when(userRepository.findByEmail(email)).thenReturn(List.of(user));
 

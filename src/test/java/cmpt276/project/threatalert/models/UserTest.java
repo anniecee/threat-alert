@@ -3,6 +3,7 @@ package cmpt276.project.threatalert.models;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -15,6 +16,7 @@ public class UserTest {
 
     @BeforeEach
     public void setUp() {
+        date = new Date();
         user = new User("Test User", "test@example.com", "password");
     }
 
@@ -46,7 +48,7 @@ public class UserTest {
         // Test admin constructor
         User adminUser = new User("admin@example.com", "adminpassword", "admin");
         assertEquals("Admin", adminUser.getName());
-        assertNotNull(adminUser.getDate());
+        assertEquals(date, adminUser.getDate());
         assertEquals("admin@example.com", adminUser.getEmail());
         assertEquals("adminpassword", adminUser.getPassword());
         assertEquals("admin", adminUser.getType());
@@ -124,5 +126,26 @@ public class UserTest {
         assertEquals(1, user.getScans().size());
         user.removeScan(scan);
         assertEquals(0, user.getScans().size());
+    }
+
+    @Test
+    public void addAndRemoveMultipleScans() {
+        // Test addScan and removeScan multiple times
+        int qty = 5;
+        List<Scan> scans = new ArrayList<>();
+        for (int i = 0; i < qty; i++) {
+            Scan scan = new Scan();
+            scan.setSid(i);
+            scans.add(scan);
+            user.addScan(scan);
+
+            assertEquals(i, user.getScans().get(i).getSid());
+        }
+
+        for (int i = 0; i < qty; i++) {
+            user.removeScan(scans.get(0));
+            scans.remove(0);
+            assertEquals(--qty, user.getScans().size());
+        }
     }
 }
