@@ -143,8 +143,10 @@ public class UserController {
             request.getSession().setAttribute("session_user", user);
             response.setStatus(HttpServletResponse.SC_CREATED);
 
-            redirectAttributes.addFlashAttribute("signupSuccess", true);
-            return "redirect:/home";
+            redirectAttributes.addFlashAttribute("notification", "Successful Sign Up. Please Log In Again.");
+            redirectAttributes.addFlashAttribute("action", "signup"); 
+            session.invalidate();           
+            return "redirect:/landing";
 
         //if in there, inform user saying they already have an account
         } else {
