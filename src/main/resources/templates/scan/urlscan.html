@@ -13,18 +13,18 @@
           document.getElementById('scanresult').innerText = '';
           document.getElementById('scanerror').style.display = 'none';
           document.getElementById('scanerror').innerText = '';
-          document.getElementById('features').style.display = 'block';
+          document.getElementById('instructions').style.display = 'block';
       }
       
       function handleFormSubmit(event) {
           clearResults();
-          document.getElementById('features').style.display = 'none';
+          document.getElementById('instructions').style.display = 'none';
       }
 
       document.addEventListener('DOMContentLoaded', function() {
           document.querySelector('form').addEventListener('submit', handleFormSubmit);
           if (document.getElementById('scanresult').style.display !== 'none') {
-              document.getElementById('features').style.display = 'none';
+              document.getElementById('instructions').style.display = 'none';
           }
       });
   </script>
