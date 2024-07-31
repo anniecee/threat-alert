@@ -297,3 +297,8 @@ td.threat-type {
     margin-top: 2em;
     justify-content: center;
 }
+
+#page-box {
+    float: left;
+    width: fit-content;
+}

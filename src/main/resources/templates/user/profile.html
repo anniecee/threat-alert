@@ -36,12 +36,15 @@
             </div>
           </div>
       </nav>
-
+    
+    <br>
     <div class="container-fluid">
-        <header class="header-sh">User Profile</header>
-        <b>Name: </b><span th:text="${user.name}"></span><br>
-        <b>Email: </b><span th:text="${user.email}"></span><br>
-        <b>Member since: </b><span th:text="${#dates.format(user.date, 'MMMMM dd, yyyy h:mma')}"></span><br>
+        <div class="container" id="page-box">
+            <header class="header-sh">User Profile</header><br>
+            <b>Name: </b><span th:text="${user.name}"></span><br>
+            <b>Email: </b><span th:text="${user.email}"></span><br>
+            <b>Member since: </b><span th:text="${#dates.format(user.date, 'MMMMM dd, yyyy h:mma')}"></span><br>
+        </div>
     </div>
     <br>
     <!-- <div class="container-fluid">
