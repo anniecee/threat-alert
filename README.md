@@ -31,6 +31,7 @@ ThreatAlert is a collaborative web application dedicated to safeguarding the dig
 -   Thymeleaf
 -   HTML/CSS
 -   JavaScript
+-   Bootstrap
 - PostgreSQL
 
 ## Demo
