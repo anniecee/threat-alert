@@ -32,6 +32,7 @@ public class User {
     public User() {}
 
     public User(String name, String email, String password) {
+        TimeZone.setDefault(TimeZone.getTimeZone("PST"));
         this.name = name;
         this.date = new Date();
         this.email = email;
@@ -41,6 +42,7 @@ public class User {
     }
 
     public User(String name, String email, String password, String type) {
+        TimeZone.setDefault(TimeZone.getTimeZone("PST"));
         this.name = name;
         this.date = new Date();
         this.email = email;
