@@ -250,6 +250,7 @@ td.threat-type {
     border-bottom: 2px solid #ddd;
     justify-content: center;
 }
+
 .nav-tabs .nav-link {
     width: 300px;
     border: none;
@@ -257,17 +258,42 @@ td.threat-type {
     font-weight: bold;
     text-align: center;
 }
+
 .nav-tabs .nav-link:hover {
     border: none;
     color: #0056b3;
 }
+
 .nav-tabs .nav-link.active {
     color: #007bff;
     background-color: transparent;
     border-color: transparent;
     border-bottom: 2px solid #007bff;
 }
+
 .nav-tabs .nav-link.active:hover {
     color: #0056b3;
     border-bottom: 2px solid #0056b3;
+}
+
+.col-md-10 {
+    padding-left: 1.75em;
+}
+
+#feature-text {
+    padding-left: 0px;
+}
+
+.row {
+    justify-content: center;
+}
+
+.landing-features {
+    margin-top: 1em;
+    justify-content: center;
+}
+
+.instruction-feature {
+    margin-top: 2em;
+    justify-content: center;
 }
