@@ -37,10 +37,12 @@ ThreatAlert is a collaborative web application dedicated to safeguarding the dig
 - Landing page
 ![Landing page](https://i.imgur.com/8YI0l5w.png)
 - URL Scanning
-![URL Scanning](https://i.imgur.com/0wjbGf4.png)
+![URL Scanning](https://i.imgur.com/KIXnkc2.png)
+![URL Scanning 2](https://i.imgur.com/IwUP8YJ.png)
 
 - File Scanning
-![File Scanning](https://i.imgur.com/JTFI0tl.png)
+![File Scanning](https://i.imgur.com/fTHshKV.png)
+![File Scanning 2](https://i.imgur.com/o4ROg0W.png)
 
 - Scan History
 ![Scan History](https://i.imgur.com/tpYraJi.png)
