@@ -1,15 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="/css/threatalert.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <title>Home</title>
 </head>
+
 <body>
     <div th:if="${notification}" th:text="${notification}" id="notification" style="display: none;"></div>
     <div th:if="${action}" th:text="${action}" id="action" style="display: none;"></div>
@@ -39,9 +42,9 @@
                     <div class="container-ta-desc">
                         <header class="header-ta-desc">Scan websites & files for potential threats.</header>
                         <p class="p-ta-desc">
-                            Threat Alert is designed to empower users 
-                            with real-time threat detection and website 
-                            analysis. We allow you to scan URLs, files and 
+                            Threat Alert is designed to empower users
+                            with real-time threat detection and website
+                            analysis. We allow you to scan URLs, files and
                             flag potential malware or phishing attempts.</p>
 
                         <div class="row justify-content-center">
@@ -78,13 +81,11 @@
                             <div class="circle"><i class="fa fa-info"></i></div>
                         </div>
                         <div class="col-md-10" id="feature-text">
-                            <header class="header-ta-features">Scan websites and files</header>
+                            <header class="header-ta-features">Scan Websites and Files</header>
                             <p class="p-ta-features">
-                                ThreatAlert, at its core, detects and reports 
-                                potential malware, phishing attempts, or 
-                                other threats that could harm the user. This 
-                                is done through the VirusTotal API, which 
-                                scans URLs or files and reports the results.
+                                ThreatAlert uses the power of the VirusTotal API to inform users of potential malware,
+                                phishing attempts, or other security threats that could harm users. It scans a URL or
+                                file and provides a comprehensive report of potential threats to users.
                             </p>
                         </div>
                     </div>
@@ -93,12 +94,12 @@
                             <div class="circle"><i class="fa fa-info"></i></div>
                         </div>
                         <div class="col-md-10" id="feature-text">
-                            <header class="header-ta-features">Overview and summary</header>
+                            <header class="header-ta-features">Overview and Summary</header>
                             <p class="p-ta-features">
-                                View scan reports with detailed analyses and with the incorporation of OpenAI API, it allows users to 
-                                receive concise AI-generated summaries of your results.
-                                We empower users to quickly grasp potential threats 
-                                and make informed decisions.
+                                Through the use of the OpenAI API, ThreatAlert utlises the power of Artificial
+                                Intelligence to generate a short summary of any detected threats of scanned items.
+                                ThreatAlert aids users in swiftly understanding any potential threats and how to proceed
+                                with these threats in mind.
                             </p>
                         </div>
                     </div>
@@ -107,13 +108,11 @@
                             <div class="circle"><i class="fa fa-info"></i></div>
                         </div>
                         <div class="col-md-10" id="feature-text">
-                            <header class="header-ta-features">Feedback and personalized history</header>
+                            <header class="header-ta-features">Community-Based Feedback</header>
                             <p class="p-ta-features">
-                                Users can share feedback and experiences 
-                                on scanned websites, contributing to a 
-                                growing knowledge base. Enhance your 
-                                browsing with personalized history 
-                                and bookmarking features.
+                                ThreatAlert fosters a community of security-conscious users who can share their
+                                experiences browsing various websites. Users can leave comments on scanned websites, as
+                                well as view experiences of other users through their comments.
                             </p>
                         </div>
                     </div>
@@ -135,4 +134,5 @@
         /*]]>*/
     </script>
 </body>
+
 </html>
