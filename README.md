@@ -34,9 +34,9 @@ Web application for scanning URLs and files for malicious threats using the Viru
    |---|---|---|
    | `DB_URL` | JDBC connection string | `jdbc:postgresql://localhost:5432/threatalert` |
    | `DB_USERNAME` | Database username | `postgres` |
-   | `DB_PASSWORD` | Database password | — |
-   | `VIRUSTOTAL_API_KEY` | VirusTotal API key | — |
-   | `OPENAI_API_KEY` | OpenAI API key | — |
+   | `DB_PASSWORD` | Database password | - |
+   | `VIRUSTOTAL_API_KEY` | VirusTotal API key | - |
+   | `OPENAI_API_KEY` | OpenAI API key | - |
 
 3. Run the application:
    ```bash
