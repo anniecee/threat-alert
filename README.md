@@ -1,6 +1,7 @@
 # ThreatAlert
 
 Web application for scanning URLs and files for malicious threats using the VirusTotal API, with AI-generated summaries, scan history, bookmarks, and a discussion section.
+
 **Date:** 2024
 
 ## Features
